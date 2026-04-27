@@ -2,129 +2,174 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<meta name="description" content="RecycloLux — Luxembourg Waste Sorting Game. Learn to sort waste correctly in Luxembourg through a fun, multilingual quiz."/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<meta name="description" content="RecycloLux — Learn Luxembourg waste sorting for children, adults and seniors. 4 languages, 91 real items, search any object."/>
 <meta name="theme-color" content="#378ADD"/>
 <title>RecycloLux — Luxembourg Waste Sorting</title>
 <style>
-  :root{
-    --bg:#ffffff;--bg2:#f5f5f5;--bg3:#ebebeb;
-    --border:#e0e0e0;--border2:#d0d0d0;
-    --text:#111111;--text2:#555555;--text3:#888888;
-    --blue:#378ADD;--blue-bg:#E6F1FB;--blue-txt:#0C447C;
-    --red-bg:#FCEBEB;--red-txt:#791F1F;
-    --green-bg:#EAF3DE;--green-txt:#27500A;
-    --orange-bg:#FEF3E2;--orange-txt:#7a4a00;
-    --radius:14px;--radius-sm:10px;
-    font-size:16px;
-  }
-  @media(prefers-color-scheme:dark){
-    :root{
-      --bg:#1a1a1a;--bg2:#252525;--bg3:#303030;
-      --border:#383838;--border2:#444;
-      --text:#f0f0f0;--text2:#aaa;--text3:#666;
-      --blue-bg:#0d2a44;--blue-txt:#7bbfff;
-      --red-bg:#3a1010;--red-txt:#ff9999;
-      --green-bg:#102210;--green-txt:#88cc66;
-      --orange-bg:#3a2200;--orange-txt:#ffbb66;
-    }
-  }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;justify-content:center}
-  #app{width:100%;max-width:640px;padding:14px 12px 32px;min-height:100vh}
+:root{
+  --bg:#fff;--bg2:#f5f5f5;--bg3:#ebebeb;
+  --bdr:#e0e0e0;--bdr2:#d0d0d0;
+  --tx:#111;--tx2:#555;--tx3:#888;
+  --blue:#378ADD;--blue-bg:#E6F1FB;--blue-tx:#0C447C;
+  --red-bg:#FCEBEB;--red-tx:#791F1F;
+  --grn-bg:#EAF3DE;--grn-tx:#27500A;
+  --org-bg:#FEF3E2;--org-tx:#7a4a00;
+  --ylw-bg:#FFFBE6;--ylw-tx:#7a6000;
+  --r:14px;--rs:10px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1a1a1a;--bg2:#252525;--bg3:#303030;
+  --bdr:#383838;--bdr2:#484848;
+  --tx:#f0f0f0;--tx2:#aaa;--tx3:#666;
+  --blue-bg:#0d2a44;--blue-tx:#7bbfff;
+  --red-bg:#3a1010;--red-tx:#ff9999;
+  --grn-bg:#102210;--grn-tx:#88cc66;
+  --org-bg:#3a2200;--org-tx:#ffbb66;
+  --ylw-bg:#2a2400;--ylw-tx:#ffdd88;
+}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;display:flex;justify-content:center}
+#app{width:100%;max-width:640px;padding:14px 12px 40px}
 
-  /* ── Setup ── */
-  .slabel{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px}
-  .card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
-  .row{display:flex;gap:8px;flex-wrap:wrap}
-  .opt{flex:1;min-width:80px;padding:10px 8px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--bg2);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;text-align:center;line-height:1.4;transition:border-color .12s,background .12s,color .12s;-webkit-user-select:none;user-select:none}
-  .opt:active{opacity:.8}
-  .opt.sel{border-color:var(--blue);background:var(--blue-bg);color:var(--blue-txt)}
-  .lvdesc{font-size:12px;color:var(--text3);font-style:italic;margin-top:8px;min-height:32px;line-height:1.5;transition:color .2s}
-  .lvdesc.set{color:var(--text2);font-style:normal}
-  #sbtn{width:100%;padding:13px;border-radius:var(--radius-sm);border:none;background:#B4B2A9;color:#fff;font-size:15px;font-weight:600;cursor:not-allowed;margin-top:4px;transition:background .2s;letter-spacing:.02em}
-  #sbtn.ready{background:var(--blue);cursor:pointer}
-  #sbtn.ready:active{background:#185FA5}
-  #setup-hint{font-size:12px;color:#c0392b;text-align:center;margin-top:7px;min-height:16px}
+/* ── tabs ── */
+#tabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:16px;gap:2px}
+.tab{flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+.tab.active{color:var(--blue);border-color:var(--blue)}
 
-  /* ── Game ── */
-  #sg,#se{display:none}
-  #topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
-  .pill{font-size:12px;padding:4px 11px;border-radius:20px;font-weight:600;white-space:nowrap}
-  .pbl{background:var(--blue-bg);color:var(--blue-txt)}
-  .prd{background:var(--red-bg);color:var(--red-txt)}
-  .pgr{background:var(--green-bg);color:var(--green-txt)}
-  .por{background:var(--orange-bg);color:var(--orange-txt)}
-  .lsel{font-size:12px;padding:4px 9px;border-radius:16px;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer}
-  #prog{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
-  .pd{width:10px;height:10px;border-radius:50%;background:var(--border)}
-  .pd.ok{background:#639922}.pd.fail{background:#E24B4A}.pd.cur{background:var(--text2)}.pd.hinted{background:#EF9F27}
-  #ia{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;align-items:center}
-  #isvg{margin-bottom:6px}
-  #iname{font-size:17px;font-weight:600;color:var(--text);margin-bottom:4px;text-align:center}
-  #idesc{font-size:12px;color:var(--text2);text-align:center;line-height:1.5;margin-bottom:6px;max-width:420px}
-  #ihint-row{display:flex;align-items:center;justify-content:center;gap:8px;min-height:26px;flex-wrap:wrap}
-  #ihint{font-size:12px;color:var(--orange-txt);background:var(--orange-bg);border-radius:8px;padding:4px 12px;display:none;text-align:center;line-height:1.4;max-width:380px}
-  #hint-btn{font-size:12px;padding:4px 12px;border-radius:12px;border:1.5px solid #EF9F27;background:transparent;color:#b06a00;cursor:pointer;white-space:nowrap;font-weight:500}
-  #hint-btn:active{background:var(--orange-bg)}
-  #hint-btn:disabled{opacity:.35;cursor:default}
-  #twrap{height:5px;background:var(--bg3);border-radius:3px;margin-bottom:10px;overflow:hidden;display:none}
-  #tbar{height:5px;background:var(--blue);border-radius:3px;transition:width .25s linear,background .25s}
-  #bins{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:10px}
-  .bin{border:2px solid var(--border);border-radius:var(--radius-sm);padding:8px 4px;text-align:center;cursor:pointer;background:var(--bg);-webkit-user-select:none;user-select:none;transition:transform .12s,border-color .12s,background .12s}
-  .bin:active{transform:scale(.96)}
-  @media(hover:hover){.bin:hover{transform:translateY(-4px)}}
-  .bin svg{display:block;margin:0 auto 3px}
-  .bin-label{font-size:11px;font-weight:500;color:var(--text2);line-height:1.2}
-  .bin.bok{background:var(--green-bg);border-color:#639922}
-  .bin.bno{background:var(--red-bg);border-color:#A32D2D}
-  .bin.locked{opacity:.25;pointer-events:none}
-  #fb{min-height:52px;border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;text-align:center;line-height:1.5;display:flex;align-items:center;justify-content:center;flex-direction:column;margin-bottom:8px;background:var(--bg2);color:var(--text2)}
-  #fb.ok{background:var(--green-bg);color:var(--green-txt)}
-  #fb.no{background:var(--red-bg);color:var(--red-txt)}
-  #fbm{font-weight:600;margin-bottom:2px;font-size:14px}
-  #fbs{font-size:12px;opacity:.85}
+/* ── setup ── */
+.slabel{font-size:11px;font-weight:600;color:var(--tx3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px}
+.card{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
+.optrow{display:flex;gap:8px;flex-wrap:wrap}
+.opt{flex:1;min-width:76px;padding:10px 6px;border-radius:var(--rs);border:1.5px solid var(--bdr);background:var(--bg2);color:var(--tx2);font-size:13px;font-weight:500;cursor:pointer;text-align:center;line-height:1.4;transition:all .12s;-webkit-user-select:none;user-select:none}
+.opt:active{opacity:.75}
+.opt.sel{border-color:var(--blue);background:var(--blue-bg);color:var(--blue-tx)}
+.lvdesc{font-size:12px;color:var(--tx3);font-style:italic;margin-top:8px;min-height:32px;line-height:1.5}
+.lvdesc.set{color:var(--tx2);font-style:normal}
+#sbtn{width:100%;padding:13px;border-radius:var(--rs);border:none;background:#b4b2a9;color:#fff;font-size:15px;font-weight:600;cursor:not-allowed;margin-top:4px;transition:background .2s}
+#sbtn.ready{background:var(--blue);cursor:pointer}
+#sbtn.ready:active{background:#185FA5}
+#setup-err{font-size:12px;color:#c0392b;text-align:center;margin-top:7px;min-height:16px}
 
-  /* ── End ── */
-  #ecard{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-top:8px}
-  #eem{font-size:52px;margin-bottom:6px;text-align:center}
-  #est{font-size:28px;letter-spacing:5px;margin-bottom:8px;text-align:center}
-  #etitle{font-size:20px;font-weight:600;color:var(--text);margin-bottom:4px;text-align:center}
-  #ebody{font-size:14px;color:var(--text2);margin-bottom:18px;line-height:1.6;white-space:pre-line;text-align:center}
-  .ebtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
-  .ebtns button{padding:10px 20px;border-radius:9px;border:1px solid var(--border);background:transparent;font-size:13px;font-weight:500;cursor:pointer;color:var(--text)}
-  .ebtns button:active{background:var(--bg2)}
-  .ebtns button.pr{background:var(--blue);color:#fff;border:none}
-  .ebtns button.pr:active{background:#185FA5}
-  #wrong-section{display:none}
-  .ws-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px}
-  .wrong-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--bg2);border:1px solid var(--border);margin-bottom:8px}
-  .wi-svg{flex-shrink:0;display:flex;align-items:center;justify-content:center}
-  .wi-body{flex:1;min-width:0}
-  .wi-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
-  .wi-bins{display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap}
-  .wi-bin-tag{font-size:11px;padding:2px 8px;border-radius:8px;font-weight:600}
-  .wi-wrong{background:var(--red-bg);color:var(--red-txt)}
-  .wi-right{background:var(--green-bg);color:var(--green-txt)}
-  .wi-timed{background:var(--orange-bg);color:var(--orange-txt)}
-  .wi-arrow{font-size:12px;color:var(--text3)}
-  .wi-explain{font-size:11px;color:var(--text2);line-height:1.45}
-  .divider{height:1px;background:var(--border);margin:18px 0}
+/* ── search tab ── */
+#search-wrap{padding:4px 0}
+#search-input{width:100%;padding:12px 16px;border-radius:var(--r);border:1px solid var(--bdr);background:var(--bg2);color:var(--tx);font-size:15px;outline:none;margin-bottom:12px}
+#search-input:focus{border-color:var(--blue)}
+#search-results{min-height:60px}
+.sr-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:var(--rs);background:var(--bg2);border:1px solid var(--bdr);margin-bottom:8px}
+.sr-body{flex:1}
+.sr-name{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:3px}
+.sr-bin{display:inline-block;font-size:11px;padding:2px 9px;border-radius:8px;font-weight:600;margin-bottom:5px}
+.sr-explain{font-size:12px;color:var(--tx2);line-height:1.45}
+.sr-hint{font-size:11px;color:var(--org-tx);background:var(--org-bg);border-radius:6px;padding:3px 8px;margin-top:4px;display:inline-block}
+.sr-empty{text-align:center;color:var(--tx3);font-size:14px;padding:24px 0;line-height:1.6}
+#unknown-log-note{font-size:12px;color:var(--tx3);text-align:center;margin-top:8px;padding:8px;background:var(--bg2);border-radius:var(--rs);display:none}
 
-  /* ── Header ── */
-  .game-title{font-size:18px;font-weight:700;color:var(--text)}
-  .game-sub{font-size:12px;color:var(--text2)}
+/* ── game screen ── */
+#sg,#se{display:none}
+#topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:6px;flex-wrap:wrap}
+.pill{font-size:12px;padding:4px 11px;border-radius:20px;font-weight:600;white-space:nowrap}
+.pbl{background:var(--blue-bg);color:var(--blue-tx)}
+.prd{background:var(--red-bg);color:var(--red-tx)}
+.pgr{background:var(--grn-bg);color:var(--grn-tx)}
+.por{background:var(--org-bg);color:var(--org-tx)}
+.lsel{font-size:12px;padding:4px 9px;border-radius:16px;border:1px solid var(--bdr);background:var(--bg);color:var(--tx);cursor:pointer}
+#prog{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.pd{width:10px;height:10px;border-radius:50%;background:var(--bdr)}
+.pd.ok{background:#639922}.pd.fail{background:#E24B4A}.pd.cur{background:var(--tx2)}.pd.hint{background:#EF9F27}
+#ia{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-bottom:10px;display:flex;flex-direction:column;align-items:center}
+#ia.senior-mode #iname{font-size:19px}
+#ia.senior-mode #idesc{font-size:14px}
+#isvg{margin-bottom:6px}
+#iname{font-size:17px;font-weight:600;color:var(--tx);margin-bottom:4px;text-align:center}
+#idesc{font-size:12px;color:var(--tx2);text-align:center;line-height:1.5;margin-bottom:6px;max-width:420px}
+#ihint-row{display:flex;align-items:center;justify-content:center;gap:8px;min-height:26px;flex-wrap:wrap}
+#ihint{font-size:12px;color:var(--org-tx);background:var(--org-bg);border-radius:8px;padding:4px 12px;display:none;text-align:center;line-height:1.4;max-width:380px}
+#hbtn{font-size:12px;padding:4px 12px;border-radius:12px;border:1.5px solid #EF9F27;background:transparent;color:#b06a00;cursor:pointer;white-space:nowrap;font-weight:500}
+#hbtn:active{background:var(--org-bg)}
+#hbtn:disabled{opacity:.35;cursor:default}
+#twrap{height:5px;background:var(--bg3);border-radius:3px;margin-bottom:10px;overflow:hidden;display:none}
+#tbar{height:5px;background:var(--blue);border-radius:3px;transition:width .25s linear,background .25s}
+#bins{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:10px}
+.bin{border:2px solid var(--bdr);border-radius:var(--rs);padding:8px 4px;text-align:center;cursor:pointer;background:var(--bg);-webkit-user-select:none;user-select:none;transition:transform .12s,border-color .12s,background .12s}
+.bin:active{transform:scale(.95)}
+@media(hover:hover){.bin:hover{transform:translateY(-4px)}}
+.bin svg{display:block;margin:0 auto 3px}
+.bin-label{font-size:11px;font-weight:500;color:var(--tx2);line-height:1.2}
+.bin.bok{background:var(--grn-bg);border-color:#639922}
+.bin.bno{background:var(--red-bg);border-color:#A32D2D}
+.bin.locked{opacity:.22;pointer-events:none}
+#fb{min-height:54px;border-radius:var(--rs);padding:10px 14px;font-size:13px;text-align:center;line-height:1.5;display:flex;align-items:center;justify-content:center;flex-direction:column;margin-bottom:8px;background:var(--bg2);color:var(--tx2)}
+#fb.ok{background:var(--grn-bg);color:var(--grn-tx)}
+#fb.no{background:var(--red-bg);color:var(--red-tx)}
+#fbm{font-weight:600;margin-bottom:2px;font-size:14px}
+#fbs{font-size:12px;opacity:.85}
+#fine-note{font-size:11px;color:var(--ylw-tx);background:var(--ylw-bg);border-radius:6px;padding:3px 10px;margin-top:4px;display:none}
+
+/* ── end screen ── */
+#ecard{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;margin-top:8px}
+#eem{font-size:52px;margin-bottom:6px;text-align:center}
+#est{font-size:26px;letter-spacing:5px;margin-bottom:8px;text-align:center}
+#etitle{font-size:20px;font-weight:600;color:var(--tx);margin-bottom:4px;text-align:center}
+#ebody{font-size:14px;color:var(--tx2);margin-bottom:8px;line-height:1.6;white-space:pre-line;text-align:center}
+#efine{font-size:13px;color:var(--ylw-tx);background:var(--ylw-bg);border-radius:var(--rs);padding:10px 14px;margin-bottom:16px;text-align:center;line-height:1.5;display:none}
+.ebtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.ebtns button{padding:10px 20px;border-radius:9px;border:1px solid var(--bdr);background:transparent;font-size:13px;font-weight:500;cursor:pointer;color:var(--tx)}
+.ebtns button:active{background:var(--bg2)}
+.ebtns button.pr{background:var(--blue);color:#fff;border:none}
+.ebtns button.pr:active{background:#185FA5}
+
+/* ── wrong items review ── */
+#ws{display:none}
+.ws-hdr{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.wi{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:var(--rs);background:var(--bg2);border:1px solid var(--bdr);margin-bottom:8px}
+.wi-svg{flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.wi-body{flex:1;min-width:0}
+.wi-name{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:3px}
+.wi-bins{display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap}
+.wi-tag{font-size:11px;padding:2px 8px;border-radius:8px;font-weight:600}
+.wi-wrong{background:var(--red-bg);color:var(--red-tx)}
+.wi-right{background:var(--grn-bg);color:var(--grn-tx)}
+.wi-timed{background:var(--org-bg);color:var(--org-tx)}
+.wi-arr{font-size:12px;color:var(--tx3)}
+.wi-explain{font-size:11px;color:var(--tx2);line-height:1.45}
+.divider{height:1px;background:var(--bdr);margin:18px 0}
+
+
+
+/* ── share modal ── */
+#share-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:16px}
+#share-modal-overlay.open{display:flex}
+#share-modal{background:var(--bg);border-radius:var(--r);padding:20px;width:100%;max-width:420px;border:1px solid var(--bdr)}
+#share-modal h3{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:12px}
+#share-modal textarea{width:100%;padding:10px 12px;border-radius:var(--rs);border:1px solid var(--bdr);background:var(--bg2);color:var(--tx);font-size:13px;line-height:1.5;resize:none;height:140px;margin-bottom:10px;font-family:inherit}
+#share-modal textarea:focus{outline:none;border-color:var(--blue)}
+.share-modal-btns{display:flex;gap:8px;flex-wrap:wrap}
+.share-modal-btns button{flex:1;padding:10px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:transparent;color:var(--tx)}
+.share-modal-btns button.copy-btn{background:var(--blue);color:#fff;border:none}
+.share-modal-btns button:active{opacity:.8}
+#copy-feedback{font-size:12px;color:var(--grn-tx);background:var(--grn-bg);border-radius:8px;padding:4px 10px;text-align:center;margin-top:6px;display:none}
+
+/* ── share ── */
+#share-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:var(--rs);border:1.5px solid var(--blue);background:transparent;color:var(--blue);font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;transition:background .15s}
+#share-btn:active{background:var(--blue-bg)}
+/* ── end share card ── */
+#share-end-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:9px;border:1.5px solid var(--blue);background:transparent;color:var(--blue);font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+#share-end-btn:active{background:var(--blue-bg)}
+
+/* ── shared ── */
+.gametop-title{font-size:16px;font-weight:700;color:var(--tx)}
 </style>
 </head>
 <body>
 <div id="app">
 
-<!-- ══ SETUP ══════════════════════════════════════════════════════════ -->
+<!-- ══════════════ SETUP ═══════════════════════════════════════════════════ -->
 <div id="ss">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
     <div>
-      <div class="game-title">♻️ RecycloLux</div>
-      <div class="game-sub">Luxembourg Waste Sorting Game</div>
+      <div style="font-size:20px;font-weight:700;color:var(--tx)">♻️ RecycloLux</div>
+      <div style="font-size:12px;color:var(--tx2)">Luxembourg Waste Sorting Game</div>
     </div>
     <select class="lsel" onchange="lang=this.value">
       <option value="en">🇬🇧 English</option>
@@ -133,33 +178,82 @@
       <option value="lb">🇱🇺 Lëtzebuergesch</option>
     </select>
   </div>
-  <div class="card">
-    <div class="slabel">1 — Choose difficulty</div>
-    <div class="row">
-      <div class="opt" id="lb-beginner" onclick="selLv('beginner')">🌱 Beginner<br><span style="font-size:10px;font-weight:400">easy items</span></div>
-      <div class="opt" id="lb-advanced" onclick="selLv('advanced')">🔥 Advanced<br><span style="font-size:10px;font-weight:400">tricky items</span></div>
-      <div class="opt" id="lb-expert" onclick="selLv('expert')">⚡ Expert<br><span style="font-size:10px;font-weight:400">Timed + all</span></div>
-    </div>
-    <div class="lvdesc" id="lvdesc">Select a difficulty to see its description.</div>
+
+  <div id="tabs">
+    <div class="tab active" onclick="showTab('game-setup')">🎮 Play</div>
+    <div class="tab" onclick="showTab('search')">🔍 Search</div>
+    <div class="tab" onclick="showTab('about')">ℹ️ About</div>
   </div>
-  <div class="card">
-    <div class="slabel">2 — Number of items</div>
-    <div class="row">
-      <div class="opt" id="lb-10" onclick="selQty(10)">10<br><span style="font-size:10px;font-weight:400">~3 min</span></div>
-      <div class="opt" id="lb-30" onclick="selQty(30)">30<br><span style="font-size:10px;font-weight:400">~10 min</span></div>
-      <div class="opt" id="lb-0" onclick="selQty(0)">∞ Unlimited<br><span style="font-size:10px;font-weight:400">endless shuffle</span></div>
+
+  <div id="tab-game-setup">
+    <div class="card">
+      <div class="slabel">1 — Who is playing?</div>
+      <div class="optrow">
+        <div class="opt" id="ag-child" onclick="selAge('child')">👶 Children<br><span style="font-size:10px;font-weight:400">age ≤ 12</span></div>
+        <div class="opt" id="ag-adult" onclick="selAge('adult')">🧑 Adults<br><span style="font-size:10px;font-weight:400">age 13–64</span></div>
+        <div class="opt" id="ag-senior" onclick="selAge('senior')">👴 Seniors<br><span style="font-size:10px;font-weight:400">age 65+</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="slabel">2 — Choose difficulty</div>
+      <div class="optrow">
+        <div class="opt" id="lv-beginner" onclick="selLv('beginner')">🌱 Beginner<br><span style="font-size:10px;font-weight:400">easy items</span></div>
+        <div class="opt" id="lv-advanced" onclick="selLv('advanced')">🔥 Advanced<br><span style="font-size:10px;font-weight:400">tricky items</span></div>
+        <div class="opt" id="lv-expert" onclick="selLv('expert')">⚡ Expert<br><span style="font-size:10px;font-weight:400">timed + all</span></div>
+      </div>
+      <div class="lvdesc" id="lvdesc">Select a difficulty to see its description.</div>
+    </div>
+
+    <div class="card">
+      <div class="slabel">3 — Number of items</div>
+      <div class="optrow">
+        <div class="opt" id="q-10" onclick="selQty(10)">10<br><span style="font-size:10px;font-weight:400">~3 min</span></div>
+        <div class="opt" id="q-30" onclick="selQty(30)">30<br><span style="font-size:10px;font-weight:400">~10 min</span></div>
+        <div class="opt" id="q-0" onclick="selQty(0)">∞<br><span style="font-size:10px;font-weight:400">endless</span></div>
+      </div>
+    </div>
+
+    <button id="sbtn" onclick="tryStart()">Start sorting →</button>
+    <div id="setup-err">Please select who is playing, a difficulty, and number of items.</div>
+    <button id="share-btn" onclick="shareGame()">🔗 Share RecycloLux</button>
+  </div>
+
+  <div id="tab-search" style="display:none">
+    <input id="search-input" type="search" placeholder="Type an item e.g. 'Pringles', 'cotton bud', 'nappy'…" oninput="doSearch(this.value)" autocomplete="off"/>
+    <div id="search-results">
+      <div class="sr-empty">Type any waste item to find out which bin it goes in.</div>
+    </div>
+    <div id="unknown-log-note"></div>
+  </div>
+
+  <div id="tab-about" style="display:none;font-size:13px;color:var(--tx2);line-height:1.7">
+    <div class="card">
+      <p style="font-size:15px;font-weight:600;color:var(--tx);margin-bottom:8px">♻️ About RecycloLux</p>
+      <p>RecycloLux helps Luxembourg residents — including newcomers, children, and seniors — learn the country's waste sorting rules through hands-on practice with real items.</p>
+      <br>
+      <p><b style="color:var(--tx)">Luxembourg's sorting system began in 1995</b> when Valorlux was founded on 2 October 1995. The rules were significantly expanded in July 2021 (new PMC items) and again with the Waste Act of 2022.</p>
+      <br>
+      <p><b style="color:var(--tx)">Wrong sorting has real consequences:</b></p>
+      <ul style="margin:6px 0 0 16px">
+        <li>Red penalty label on your PMC bag — you must re-sort before next collection</li>
+        <li>Administrative fines: €25–€250</li>
+        <li>Unsorted residual bin costs ~€600/year vs ~€220/year for a properly sorted household — a saving of <b>€380/year</b></li>
+      </ul>
+      <br>
+      <p><b style="color:var(--tx)">4 languages:</b> English · Français · Deutsch · Lëtzebuergesch</p>
+      <br>
+      <p style="font-size:11px;color:var(--tx3)">Built with ♥ for Luxembourg residents. Data based on Valorlux, Ville de Luxembourg, and Superdreckskëscht official guidelines.</p>
     </div>
   </div>
-  <button id="sbtn" onclick="tryStart()">Start sorting →</button>
-  <div id="setup-hint">Please select a difficulty and number of items first.</div>
 </div>
 
-<!-- ══ GAME ═══════════════════════════════════════════════════════════ -->
+<!-- ══════════════ GAME ════════════════════════════════════════════════════ -->
 <div id="sg">
   <div id="topbar">
-    <div class="game-title" style="font-size:16px">♻️ RecycloLux</div>
-    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-      <select class="lsel" onchange="lang=this.value">
+    <div class="gametop-title">♻️ RecycloLux</div>
+    <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+      <select class="lsel" onchange="lang=this.value;updBinLabels()">
         <option value="en">🇬🇧</option><option value="fr">🇫🇷</option>
         <option value="de">🇩🇪</option><option value="lb">🇱🇺</option>
       </select>
@@ -167,7 +261,7 @@
       <span class="pill pbl" id="scpill">⭐ 0</span>
       <span class="pill por" id="stpill" style="display:none">🎯 0</span>
       <span class="pill prd" id="lvpill">❤️❤️❤️</span>
-      <button onclick="goSetup()" style="font-size:11px;padding:4px 9px;border-radius:12px;border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--text2)">Menu</button>
+      <button onclick="goSetup()" style="font-size:11px;padding:4px 9px;border-radius:12px;border:1px solid var(--bdr);background:transparent;cursor:pointer;color:var(--tx2)">Menu</button>
     </div>
   </div>
   <div id="prog"></div>
@@ -178,7 +272,7 @@
     <div id="idesc"></div>
     <div id="ihint-row">
       <div id="ihint"></div>
-      <button id="hint-btn" onclick="useHint()">💡 Hint (−5 pts)</button>
+      <button id="hbtn" onclick="useHint()">💡 Hint (−5 pts)</button>
     </div>
   </div>
   <div id="bins">
@@ -203,42 +297,744 @@
       <div class="bin-label" id="bl-residual">Residual</div>
     </div>
   </div>
-  <div id="fb"><div id="fbm">Click a bin to sort the item!</div><div id="fbs"></div></div>
+  <div id="fb">
+    <div id="fbm">Click a bin to sort the item!</div>
+    <div id="fbs"></div>
+    <div id="fine-note"></div>
+  </div>
 </div>
 
-<!-- ══ END ════════════════════════════════════════════════════════════ -->
+<!-- ══════════════ END ═════════════════════════════════════════════════════ -->
 <div id="se">
   <div id="ecard">
     <div id="eem"></div><div id="est"></div>
     <div id="etitle"></div><div id="ebody"></div>
+    <div id="efine"></div>
     <div class="ebtns">
       <button class="pr" onclick="startGame()">Play again</button>
       <button onclick="goSetup()">Change settings</button>
+      <button id="share-end-btn" onclick="shareResult()">📤 Share result</button>
     </div>
-    <div id="wrong-section">
+    <div id="ws">
       <div class="divider"></div>
-      <div class="ws-title"><span>❌</span><span id="ws-heading">Items to review</span></div>
-      <div id="wrong-list"></div>
+      <div class="ws-hdr"><span>❌</span><span id="ws-hdr-txt">Items to review</span></div>
+      <div id="wl"></div>
     </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ SHARE MODAL ════════════════════════════════════════════ -->
+<div id="share-modal-overlay" onclick="closeShareModal(event)">
+  <div id="share-modal">
+    <h3 id="share-modal-title">📤 Share RecycloLux</h3>
+    <textarea id="share-textarea" readonly onclick="this.select()"></textarea>
+    <div class="share-modal-btns">
+      <button class="copy-btn" onclick="copyShareText()">📋 Copy</button>
+      <button onclick="closeShareModal()">Close</button>
+    </div>
+    <div id="copy-feedback">✅ Copied to clipboard!</div>
   </div>
 </div>
 
 </div><!-- #app -->
 
 <script>
-var lang="en",difficulty=null,qty=null;
-var score=0,lives=3,current=0,results=[],answering=true,streak=0,hintUsed=false;
-var queue=[],usedIds=[],timerInt=null,timeLeft=0,wrongLog=[];
+// ── Item pool (inlined) ──────────────────────────────────────────────────────
+function mksvg(inner,w,h){return'<svg width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';}
+</script>
+<script>
+// ── RecycloLux Item Pool ─────────────────────────────────────────────────────
+// age: "all" | "child" | "adult" | "senior" | "adult_senior" | "no_child"
+// level: 1=Beginner  2=Advanced  3=Expert
+// bin: glass | plastic | paper | organic | residual
+// special: battery | medication | bulky | hazardous | ewaste | textile (optional)
 
+function mksvg(inner,w,h){
+  return '<svg width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';
+}
+
+var POOL=[
+
+// ══════════════════════════════════════════════════════════════════════════════
+// FOOD & KITCHEN
+// ══════════════════════════════════════════════════════════════════════════════
+{id:"banana_peel",name:"Banana peel",
+ desc:"A soft yellow-brown peel from a freshly eaten banana.",
+ hint:"100% plant material — it fully breaks down into compost.",
+ bin:"organic",level:1,age:"all",
+ svg:function(){return mksvg('<path d="M20 62 Q8 42 12 20 Q14 8 24 6 Q28 5 30 9 Q22 12 22 26 Q22 46 30 62Z" fill="#d4a020"/><path d="M30 62 Q20 42 22 22 Q24 10 34 8 Q38 8 38 13 Q30 15 30 28 Q30 48 36 62Z" fill="#e8ba28"/><path d="M36 62 Q32 46 34 28 Q36 14 42 14 Q46 14 46 20 Q40 20 38 35 Q36 50 40 62Z" fill="#d4a020"/><path d="M17 11 Q25 4 35 5 Q42 6 46 12" stroke="#b88010" stroke-width="1.5" fill="none"/>',60,68);},
+ explain:{en:"Fruit & vegetable scraps → organic/bio bin for composting.",fr:"Épluchures → poubelle organique.",de:"Obstabfälle → Bio-Tonne.",lb:"Uebst-Offall → Bio-Tonne."}},
+
+{id:"coffee_grounds",name:"Coffee grounds & paper filter",
+ desc:"A used paper cone filter filled with wet dark coffee grounds.",
+ hint:"Both the wet grounds and the paper filter go in together — no need to separate.",
+ bin:"organic",level:1,age:"all",
+ svg:function(){return mksvg('<path d="M13 26 Q11 20 16 15 Q22 10 30 10 Q38 10 44 15 Q49 20 47 26 L41 58 Q39 64 30 64 Q21 64 19 58Z" fill="#c8e8f2"/><path d="M17 28 Q15 22 20 17 Q26 12 30 12 Q34 12 40 17 Q45 22 43 28 L37 56 Q35 62 30 62 Q25 62 23 56Z" fill="#5a2e08"/><ellipse cx="30" cy="20" rx="13" ry="5" fill="#3c1a06"/><rect x="25" y="6" width="10" height="8" rx="2" fill="#c0e0ea"/>',60,68);},
+ explain:{en:"Coffee grounds and paper filters → organic/bio bin.",fr:"Marc de café et filtres papier → poubelle organique.",de:"Kaffeesatz und Papierfilter → Bio-Tonne.",lb:"Kaffeegronnen a Pabeierfilter → Bio-Tonne."}},
+
+{id:"cooked_meat_bone",name:"Cooked meat bone",
+ desc:"A leftover T-bone steak bone with scraps of cooked meat.",
+ hint:"Cooked bones and meat scraps are accepted in the organic bin in Luxembourg.",
+ bin:"organic",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="24" y="18" width="12" height="36" rx="4" fill="#e8d8b8"/><circle cx="20" cy="18" r="8" fill="#e8d8b8"/><circle cx="20" cy="18" r="5" fill="#f0e4cc"/><circle cx="40" cy="18" r="8" fill="#e8d8b8"/><circle cx="40" cy="18" r="5" fill="#f0e4cc"/><circle cx="20" cy="54" r="8" fill="#e8d8b8"/><circle cx="20" cy="54" r="5" fill="#f0e4cc"/><circle cx="40" cy="54" r="8" fill="#e8d8b8"/><circle cx="40" cy="54" r="5" fill="#f0e4cc"/><ellipse cx="30" cy="30" rx="5" ry="4" fill="#c87050" opacity=".7"/><ellipse cx="30" cy="40" rx="4" ry="3" fill="#b86040" opacity=".6"/>',60,68);},
+ explain:{en:"Cooked food scraps including meat and bones → organic/bio bin in Luxembourg.",fr:"Restes de nourriture cuite → poubelle organique.",de:"Gekochte Essensreste → Bio-Tonne.",lb:"Gekachte Reschten → Bio-Tonne."}},
+
+{id:"eggshells",name:"Eggshells",
+ desc:"Empty broken eggshells from cooking, still slightly moist.",
+ hint:"Pure calcium carbonate and protein membrane — fully compostable.",
+ bin:"organic",level:1,age:"all",
+ svg:function(){return mksvg('<ellipse cx="30" cy="36" rx="22" ry="18" fill="#f5f0e0" stroke="#e0d8c0" stroke-width="1"/><path d="M14 30 Q22 20 38 26" stroke="#e0d8c0" stroke-width="1.5" fill="none"/><path d="M18 42 Q30 35 44 40" stroke="#e0d8c0" stroke-width="1" fill="none"/><path d="M24 24 L20 38" stroke="#c8c0a8" stroke-width="1.2" fill="none"/><path d="M36 22 L40 36" stroke="#c8c0a8" stroke-width="1.2" fill="none"/><ellipse cx="30" cy="22" rx="8" ry="4" fill="#e8e0cc"/>',60,68);},
+ explain:{en:"Eggshells → organic/bio bin. They decompose and add calcium to compost.",fr:"Coquilles d'œufs → poubelle organique.",de:"Eierschalen → Bio-Tonne.",lb:"Eeiereschalen → Bio-Tonne."}},
+
+{id:"bread",name:"Stale bread",
+ desc:"A few slices of dried-out bread, too old to eat.",
+ hint:"Bread is fully organic — even mouldy bread is fine for the bio bin.",
+ bin:"organic",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="8" y="24" width="44" height="28" rx="8" fill="#d4a060"/><ellipse cx="30" cy="24" rx="22" ry="10" fill="#e8b870"/><rect x="8" y="28" width="44" height="4" fill="#c89050"/><rect x="14" y="30" width="6" height="14" rx="2" fill="#b87840" opacity=".4"/><rect x="26" y="28" width="8" height="16" rx="2" fill="#b87840" opacity=".3"/><rect x="40" y="30" width="6" height="14" rx="2" fill="#b87840" opacity=".4"/><ellipse cx="30" cy="52" rx="22" ry="4" fill="#c89050"/>',60,68);},
+ explain:{en:"Stale or mouldy bread → organic/bio bin.",fr:"Pain rassis ou moisi → poubelle organique.",de:"Altes oder schimmeliges Brot → Bio-Tonne.",lb:"Ale Brout → Bio-Tonne."}},
+
+{id:"tea_bag_paper",name:"Paper tea bag",
+ desc:"A square paper tea bag with a cotton string and small cardboard tag.",
+ hint:"Paper tea bags go in organic. Plastic mesh / nylon pyramid bags go in residual.",
+ bin:"organic",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="18" y="8" width="24" height="36" rx="3" fill="#d4c0a0"/><rect x="18" y="8" width="24" height="36" rx="3" fill="none" stroke="#b8a080" stroke-width="1"/><line x1="20" y1="14" x2="40" y2="14" stroke="#b8a080" stroke-width="1" opacity=".5"/><line x1="20" y1="20" x2="40" y2="20" stroke="#b8a080" stroke-width="1" opacity=".5"/><line x1="20" y1="26" x2="40" y2="26" stroke="#b8a080" stroke-width="1" opacity=".5"/><line x1="20" y1="32" x2="40" y2="32" stroke="#b8a080" stroke-width="1" opacity=".5"/><rect x="29" y="44" width="2" height="14" rx="1" fill="#888"/><ellipse cx="30" cy="60" rx="7" ry="4" fill="#c8b060"/>',60,68);},
+ explain:{en:"Paper tea bags → organic bin. Nylon pyramid bags → residual.",fr:"Sachets de thé en papier → bio. Sachets nylon → poubelle noire.",de:"Papier-Teebeutel → Bio-Tonne. Nylon-Teebeutel → Restmüll.",lb:"Pabeier-Téibeilchen → Bio-Tonne."}},
+
+{id:"cooking_oil_paper",name:"Cooking oil absorbed in paper",
+ desc:"A paper towel soaked with a small amount of used cooking oil.",
+ hint:"When oil is fully absorbed in paper — not poured liquid — it can go in organic. Never pour liquid oil in any bin.",
+ bin:"organic",level:3,age:"all",
+ svg:function(){return mksvg('<rect x="10" y="18" width="40" height="32" rx="4" fill="#f0e8d0"/><rect x="10" y="18" width="40" height="32" rx="4" fill="none" stroke="#d8c8a8" stroke-width="1"/><ellipse cx="22" cy="30" rx="8" ry="6" fill="#d4a020" opacity=".4"/><ellipse cx="36" cy="36" rx="7" ry="5" fill="#c89018" opacity=".35"/><ellipse cx="28" cy="40" rx="6" ry="4" fill="#d4a020" opacity=".3"/><text x="30" y="60" text-anchor="middle" font-size="8" fill="#a08040" font-family="sans-serif">oil in paper</text>',60,68);},
+ explain:{en:"Oil absorbed fully in paper towel → organic. Never pour liquid oil down the drain or in any bin — take to Superdreckskëscht.",fr:"Huile absorbée dans du papier → organique. Huile liquide → Superdreckskëscht.",de:"In Papier aufgesaugtes Öl → Bio-Tonne. Flüssiges Öl → Superdreckskëscht.",lb:"Ueleg an Pabeier absorbéiert → Bio-Tonne."}},
+
+{id:"fish_bones",name:"Fish bones & skin",
+ desc:"Leftover fish bones and skin from a cooked meal.",
+ hint:"All cooked food scraps including fish are accepted in Luxembourg's organic bin.",
+ bin:"organic",level:1,age:"all",
+ svg:function(){return mksvg('<ellipse cx="30" cy="36" rx="24" ry="12" fill="#e8e0c8"/><path d="M6 36 Q14 28 30 36 Q46 44 54 36" stroke="#c8b888" stroke-width="1.5" fill="none"/><line x1="18" y1="30" x2="15" y2="42" stroke="#c8b888" stroke-width="1"/><line x1="24" y1="28" x2="22" y2="42" stroke="#c8b888" stroke-width="1"/><line x1="30" y1="27" x2="30" y2="44" stroke="#c8b888" stroke-width="1"/><line x1="36" y1="28" x2="38" y2="44" stroke="#c8b888" stroke-width="1"/><line x1="42" y1="30" x2="45" y2="42" stroke="#c8b888" stroke-width="1"/><ellipse cx="8" cy="36" rx="5" ry="8" fill="#d8d0b8"/>',60,68);},
+ explain:{en:"Fish bones and skin → organic/bio bin.",fr:"Arêtes et peau de poisson → poubelle organique.",de:"Fischgräten und -haut → Bio-Tonne.",lb:"Fëschknochen → Bio-Tonne."}},
+
+{id:"wine_cork",name:"Wine cork",
+ desc:"A natural cork stopper removed from a wine bottle.",
+ hint:"Despite being natural material, cork goes in residual in Luxembourg — it's not accepted in organic or glass bins.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="22" y="10" width="16" height="48" rx="6" fill="#d4a870"/><rect x="22" y="10" width="16" height="48" rx="6" fill="none" stroke="#b88850" stroke-width="1"/><rect x="24" y="16" width="12" height="2" rx="1" fill="#b88850" opacity=".5"/><rect x="24" y="22" width="12" height="2" rx="1" fill="#b88850" opacity=".5"/><rect x="24" y="28" width="12" height="2" rx="1" fill="#b88850" opacity=".5"/><rect x="24" y="34" width="12" height="2" rx="1" fill="#b88850" opacity=".5"/><rect x="24" y="40" width="12" height="2" rx="1" fill="#b88850" opacity=".5"/><rect x="24" y="46" width="12" height="2" rx="1" fill="#b88850" opacity=".5"/>',60,68);},
+ explain:{en:"Natural cork → residual bin in Luxembourg. It is not accepted in organic, glass, or paper streams.",fr:"Bouchon en liège → poubelle noire au Luxembourg.",de:"Naturkorken → Restmüll in Luxemburg.",lb:"Wäikork → Reschtmüll."}},
+
+{id:"nutshells",name:"Nutshells (walnut / hazelnut)",
+ desc:"A handful of cracked walnut and hazelnut shells.",
+ hint:"Hard but fully biodegradable — they break down slowly in compost.",
+ bin:"organic",level:2,age:"all",
+ svg:function(){return mksvg('<ellipse cx="22" cy="38" rx="12" ry="10" fill="#8B5E3C"/><ellipse cx="22" cy="38" rx="12" ry="10" fill="none" stroke="#6B4020" stroke-width="1.5"/><path d="M10 38 Q22 28 34 38" stroke="#6B4020" stroke-width="1" fill="none"/><ellipse cx="40" cy="32" rx="10" ry="8" fill="#A0724A"/><ellipse cx="40" cy="32" rx="10" ry="8" fill="none" stroke="#7A5230" stroke-width="1.5"/><ellipse cx="32" cy="52" rx="9" ry="7" fill="#8B5E3C"/><path d="M23 52 Q32 44 41 52" stroke="#6B4020" stroke-width="1" fill="none"/>',60,68);},
+ explain:{en:"Nutshells → organic/bio bin. They decompose slowly but are fully accepted.",fr:"Coquilles de noix → poubelle organique.",de:"Nussschalen → Bio-Tonne.",lb:"Nossschalen → Bio-Tonne."}},
+
+{id:"chewing_gum",name:"Chewing gum (used)",
+ desc:"A small piece of used chewing gum, still slightly sticky.",
+ hint:"Gum base is synthetic rubber — it never breaks down organically.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<ellipse cx="30" cy="38" rx="18" ry="10" fill="#e8a0b0"/><ellipse cx="30" cy="36" rx="16" ry="8" fill="#f0b8c0"/><path d="M14 36 Q22 30 30 36 Q38 42 46 36" stroke="#d08090" stroke-width="1" fill="none"/><ellipse cx="30" cy="34" rx="6" ry="3" fill="#f8d0d8" opacity=".6"/><text x="30" y="60" text-anchor="middle" font-size="7" fill="#c07080" font-family="sans-serif">chewing gum</text>',60,68);},
+ explain:{en:"Chewing gum is synthetic rubber — never organic. Residual bin.",fr:"Le chewing-gum est du caoutchouc synthétique → poubelle noire.",de:"Kaugummi ist Synthesekautschuk → Restmüll.",lb:"Kaugummi → Reschtmüll."}},
+
+{id:"cigarette_butt",name:"Cigarette butt",
+ desc:"A used cigarette butt with a filter and a small tobacco remnant.",
+ hint:"The cellulose acetate filter never biodegrades — never put in organic bin.",
+ bin:"residual",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="24" y="10" width="12" height="30" rx="4" fill="#f5f0e0"/><rect x="24" y="10" width="12" height="30" rx="4" fill="none" stroke="#ddd" stroke-width="1"/><rect x="24" y="36" width="12" height="14" rx="2" fill="#d4a870"/><rect x="26" y="38" width="8" height="2" rx="1" fill="#b88850" opacity=".5"/><rect x="26" y="42" width="8" height="2" rx="1" fill="#b88850" opacity=".5"/><rect x="24" y="8" width="12" height="4" rx="2" fill="#e8a0a0" opacity=".6"/><ellipse cx="30" cy="8" rx="4" ry="2" fill="#ff8080" opacity=".4"/>',60,68);},
+ explain:{en:"Cigarette butts → residual bin. The synthetic filter never biodegrades — never in organic.",fr:"Mégots de cigarette → poubelle noire. Le filtre synthétique ne se biodégrade jamais.",de:"Zigarettenstummel → Restmüll. Der Kunststofffilter ist nicht kompostierbar.",lb:"Zigarettenstummel → Reschtmüll."}},
+
+{id:"ice_cream_stick",name:"Ice cream stick (wooden)",
+ desc:"A plain untreated wooden stick from a finished ice cream bar.",
+ hint:"Plain untreated wood with no paint or varnish → organic or paper. Rinse off residue first.",
+ bin:"organic",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="25" y="32" width="10" height="30" rx="3" fill="#e0c898"/><rect x="25" y="32" width="10" height="30" rx="3" fill="none" stroke="#c8b078" stroke-width="1"/><rect x="18" y="10" width="24" height="26" rx="4" fill="#f0d8a0" opacity=".4"/><rect x="20" y="12" width="20" height="22" rx="3" fill="#e8d090" opacity=".5"/>',60,68);},
+ explain:{en:"Plain wooden ice cream sticks → organic bin (or paper bin).",fr:"Bâtons de glace en bois non traité → poubelle organique.",de:"Unbehandelte Holzstäbchen → Bio-Tonne.",lb:"Holzstäbchen → Bio-Tonne."}},
+
+{id:"fruit_sticker",name:"Fruit sticker (plastic)",
+ desc:"A tiny oval plastic label peeled off from an apple or pear.",
+ hint:"Tiny but plastic — if it goes in the organic bin it contaminates the compost.",
+ bin:"residual",level:3,age:"all",
+ svg:function(){return mksvg('<ellipse cx="30" cy="36" rx="20" ry="12" fill="#ffe066"/><ellipse cx="30" cy="36" rx="20" ry="12" fill="none" stroke="#ccaa00" stroke-width="1.5"/><text x="30" y="33" text-anchor="middle" font-size="7" fill="#886600" font-family="sans-serif" font-weight="700">4131</text><text x="30" y="42" text-anchor="middle" font-size="6" fill="#886600" font-family="sans-serif">PLU</text>',60,68);},
+ explain:{en:"Fruit stickers are tiny plastic labels → residual bin. They contaminate compost.",fr:"Étiquettes de fruits en plastique → poubelle noire. Elles contaminent le compost.",de:"Obstaufkleber sind kleiner Kunststoff → Restmüll.",lb:"Uebstaufkleber → Reschtmüll."}},
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PAPER & CARDBOARD
+// ══════════════════════════════════════════════════════════════════════════════
+{id:"newspaper",name:"Newspaper",
+ desc:"A folded daily broadsheet with black ink printing.",
+ hint:"Must be dry — wet or soiled paper goes in residual, not paper.",
+ bin:"paper",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="5" y="6" width="50" height="58" rx="2" fill="#f4f0e2"/><rect x="5" y="6" width="50" height="11" rx="2" fill="#1a1a1a"/><text x="30" y="15" text-anchor="middle" font-size="6" fill="#fff" font-family="sans-serif" font-weight="700">DAILY NEWS</text><rect x="9" y="21" width="42" height="2" rx="1" fill="#999"/><rect x="9" y="27" width="19" height="18" rx="1" fill="#ddd"/><rect x="30" y="27" width="20" height="3" rx="1" fill="#bbb"/><rect x="30" y="32" width="18" height="2" rx="1" fill="#ccc"/><rect x="30" y="36" width="20" height="2" rx="1" fill="#ccc"/><rect x="9" y="50" width="42" height="2" rx="1" fill="#ccc"/><rect x="9" y="55" width="36" height="2" rx="1" fill="#ddd"/>',60,68);},
+ explain:{en:"Newspapers → blue paper/press bag or container. Must be dry.",fr:"Journaux → sac papier/presse bleu. Doit être sec.",de:"Zeitungen → blauer Papier-/Pressesack. Muss trocken sein.",lb:"Zeitungen → blo Pabeier-Sak."}},
+
+{id:"magazine",name:"Glossy magazine",
+ desc:"A coated-paper lifestyle magazine with a shiny cover.",
+ hint:"Luxembourg's paper stream accepts glossy/coated paper — unlike some other countries.",
+ bin:"paper",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="7" y="6" width="46" height="58" rx="2" fill="#e03040"/><rect x="7" y="6" width="46" height="14" rx="2" fill="#b01828"/><text x="30" y="17" text-anchor="middle" font-size="7.5" fill="#fff" font-family="sans-serif" font-weight="700">MAGAZINE</text><rect x="11" y="24" width="22" height="28" rx="2" fill="#fff" opacity=".18"/><rect x="35" y="24" width="14" height="6" rx="1" fill="#fff" opacity=".3"/><rect x="35" y="32" width="12" height="4" rx="1" fill="#fff" opacity=".2"/>',60,68);},
+ explain:{en:"Glossy magazines → paper/press collection in Luxembourg.",fr:"Magazines glacés → collecte papier/presse.",de:"Hochglanzmagazine → Papiersammlung.",lb:"Glanzzäitungen → Pabeiersammlung."}},
+
+{id:"cardboard_box",name:"Clean cardboard box",
+ desc:"A flat brown corrugated cardboard box with no food residue.",
+ hint:"Flatten it first — a full 3D box wastes a lot of space in the paper bag.",
+ bin:"paper",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="8" y="24" width="44" height="36" rx="2" fill="#c8a870"/><polygon points="8,24 30,14 52,24" fill="#b89050"/><rect x="8" y="24" width="44" height="5" fill="#d4b880"/><line x1="30" y1="14" x2="30" y2="24" stroke="#a07840" stroke-width="1"/><rect x="14" y="30" width="32" height="24" rx="1" fill="#b89050" opacity=".4"/>',60,68);},
+ explain:{en:"Clean cardboard → paper bag. Flatten it first!",fr:"Carton propre → sac papier. Aplatissez-le!",de:"Sauberer Karton → Papiersack. Vorher flachdrücken!",lb:"Proppert Karton → Pabeier-Sak."}},
+
+{id:"pizza_box",name:"Greasy pizza box",
+ desc:"A cardboard pizza box with visible grease stains and cheese residue.",
+ hint:"Grease contamination overrides the material — even cardboard goes in residual.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="5" y="26" width="50" height="36" rx="2" fill="#c8a870"/><rect x="5" y="12" width="50" height="16" rx="2" fill="#d4b880"/><rect x="5" y="26" width="50" height="4" fill="#b89050"/><circle cx="30" cy="46" r="13" fill="#e87040" opacity=".75"/><circle cx="30" cy="46" r="10" fill="#e8b020" opacity=".6"/><circle cx="24" cy="43" r="3.5" fill="#c02010" opacity=".8"/><circle cx="35" cy="49" r="3.5" fill="#c02010" opacity=".8"/><ellipse cx="13" cy="50" rx="5" ry="2.5" fill="#c8a020" opacity=".45"/>',60,68);},
+ explain:{en:"Greasy cardboard cannot be recycled → residual (black) bin.",fr:"Le carton gras → poubelle noire.",de:"Fettiger Karton → Restmülltonne.",lb:"Fettegt Karton → Reschtmüll."}},
+
+{id:"egg_carton",name:"Paper egg carton",
+ desc:"A moulded grey paper-pulp tray holding 6 or 12 eggs.",
+ hint:"Grey moulded pulp = paper. Clear plastic egg tray = PMC.",
+ bin:"paper",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="5" y="32" width="50" height="28" rx="3" fill="#d0b888"/><rect x="5" y="26" width="50" height="8" rx="3" fill="#c0a878"/><ellipse cx="17" cy="26" rx="8" ry="7" fill="#b89858"/><ellipse cx="30" cy="26" rx="8" ry="7" fill="#c0a868"/><ellipse cx="43" cy="26" rx="8" ry="7" fill="#b89858"/><ellipse cx="17" cy="26" rx="5.5" ry="5" fill="#a88848"/><ellipse cx="30" cy="26" rx="5.5" ry="5" fill="#b09858"/><ellipse cx="43" cy="26" rx="5.5" ry="5" fill="#a88848"/><text x="30" y="52" text-anchor="middle" font-size="6" fill="#7a6030" font-family="sans-serif">EGG CARTON</text>',60,68);},
+ explain:{en:"Paper egg cartons → paper bag. Plastic egg cartons → PMC bag.",fr:"Boîtes à œufs en papier → sac papier.",de:"Papier-Eierkartons → Papiersack.",lb:"Pabeier-Eierdoten → Pabeier-Sak."}},
+
+{id:"receipt",name:"Thermal receipt",
+ desc:"A shiny, smooth till receipt from a supermarket checkout.",
+ hint:"Thermal paper has a chemical coating (BPA/BPS) — it cannot be recycled with regular paper.",
+ bin:"residual",level:3,age:"all",
+ svg:function(){return mksvg('<rect x="20" y="4" width="20" height="58" rx="2" fill="#f8f8f0"/><rect x="20" y="4" width="20" height="58" rx="2" fill="none" stroke="#e0e0d0" stroke-width="1"/><rect x="22" y="10" width="16" height="2" rx="1" fill="#ccc"/><rect x="22" y="15" width="16" height="1" rx="0.5" fill="#ddd"/><rect x="22" y="19" width="12" height="1" rx="0.5" fill="#ddd"/><rect x="22" y="23" width="16" height="1" rx="0.5" fill="#ddd"/><rect x="22" y="27" width="10" height="1" rx="0.5" fill="#ddd"/><rect x="22" y="31" width="14" height="2" rx="1" fill="#bbb"/><rect x="22" y="38" width="16" height="1" rx="0.5" fill="#ddd"/><rect x="22" y="42" width="12" height="1" rx="0.5" fill="#ddd"/><rect x="22" y="50" width="16" height="2" rx="1" fill="#ccc"/>',60,68);},
+ explain:{en:"Thermal receipts contain chemical coating → residual bin, not paper.",fr:"Les tickets de caisse thermiques (coating chimique) → poubelle noire.",de:"Thermobons haben Chemikalienbeschichtung → Restmüll, nicht Papier.",lb:"Thermobons → Reschtmüll."}},
+
+{id:"wrapping_paper_plain",name:"Plain wrapping paper",
+ desc:"Simple uncoated brown or white paper wrapping from a gift.",
+ hint:"Remove any tape or ribbon first, then it goes in the paper bag.",
+ bin:"paper",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="8" y="14" width="44" height="42" rx="2" fill="#f8e0a0"/><rect x="8" y="14" width="44" height="42" rx="2" fill="none" stroke="#e0c070" stroke-width="1"/><line x1="30" y1="14" x2="30" y2="56" stroke="#e0c070" stroke-width="1.5"/><line x1="8" y1="35" x2="52" y2="35" stroke="#e0c070" stroke-width="1.5"/><rect x="26" y="31" width="8" height="8" rx="1" fill="#e8b060"/><path d="M22 27 Q30 22 38 27" stroke="#e8b060" stroke-width="1.5" fill="none"/><path d="M22 43 Q30 48 38 43" stroke="#e8b060" stroke-width="1.5" fill="none"/>',60,68);},
+ explain:{en:"Plain wrapping paper (no glitter, foil, or plastic coating) → paper bag.",fr:"Papier d'emballage ordinaire (sans paillettes ni alu) → sac papier.",de:"Einfaches Geschenkpapier (kein Glitzer/Folie) → Papiersack.",lb:"Gewéinlecht Geschenkpapier → Pabeier-Sak."}},
+
+{id:"wrapping_paper_glitter",name:"Glitter / foil wrapping paper",
+ desc:"Shiny metallic or glitter-coated gift wrapping paper.",
+ hint:"The metallic or glitter layer bonds with the paper — they cannot be separated for recycling.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="8" y="14" width="44" height="42" rx="2" fill="#c060c0"/><rect x="8" y="14" width="44" height="42" rx="2" fill="none" stroke="#a040a0" stroke-width="1"/><circle cx="18" cy="24" r="3" fill="#ffe060" opacity=".7"/><circle cx="30" cy="20" r="2" fill="#fff" opacity=".6"/><circle cx="42" cy="26" r="3" fill="#ffe060" opacity=".7"/><circle cx="22" cy="36" r="2" fill="#fff" opacity=".6"/><circle cx="38" cy="38" r="3" fill="#ffe060" opacity=".7"/><circle cx="28" cy="48" r="2" fill="#fff" opacity=".6"/><circle cx="44" cy="46" r="2" fill="#ffe060" opacity=".6"/>',60,68);},
+ explain:{en:"Glitter or metallic foil wrapping paper → residual bin. The coating cannot be separated.",fr:"Papier cadeau pailleté ou métallique → poubelle noire.",de:"Glitzer- oder Foliengeschenkpapier → Restmüll.",lb:"Glittergeschenkpapier → Reschtmüll."}},
+
+{id:"birthday_card_glitter",name:"Glitter birthday card",
+ desc:"A greeting card decorated with glitter or metallic embossing.",
+ hint:"Glitter particles contaminate the entire paper recycling batch — residual bin.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="10" y="10" width="40" height="52" rx="3" fill="#e040a0"/><rect x="10" y="10" width="40" height="52" rx="3" fill="none" stroke="#c02080" stroke-width="1"/><text x="30" y="32" text-anchor="middle" font-size="9" fill="#fff">🎂</text><text x="30" y="44" text-anchor="middle" font-size="7" fill="#ffe0f0" font-family="sans-serif">Happy</text><text x="30" y="53" text-anchor="middle" font-size="7" fill="#ffe0f0" font-family="sans-serif">Birthday!</text><circle cx="16" cy="16" r="2" fill="#ffe060" opacity=".8"/><circle cx="44" cy="18" r="2" fill="#fff" opacity=".7"/><circle cx="14" cy="52" r="2" fill="#ffe060" opacity=".8"/><circle cx="46" cy="54" r="1.5" fill="#fff" opacity=".7"/>',60,68);},
+ explain:{en:"Glitter greeting cards → residual bin. Glitter contaminates paper recycling.",fr:"Cartes avec paillettes → poubelle noire. Les paillettes contaminent le recyclage papier.",de:"Glitzer-Grußkarten → Restmüll.",lb:"Glitterkarte → Reschtmüll."}},
+
+{id:"wet_newspaper",name:"Wet / soiled newspaper",
+ desc:"A newspaper that got rained on and is now soggy and stained.",
+ hint:"Contamination always overrides the material — wet paper breaks down in collection and jams sorting machines.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="5" y="10" width="50" height="50" rx="4" fill="#c8c0a0"/><rect x="5" y="10" width="50" height="50" rx="4" fill="none" stroke="#a0988080" stroke-width="2"/><ellipse cx="22" cy="28" rx="10" ry="8" fill="#a09060" opacity=".5"/><ellipse cx="40" cy="40" rx="12" ry="7" fill="#908050" opacity=".4"/><rect x="9" y="16" width="42" height="2" rx="1" fill="#888" opacity=".6"/><rect x="9" y="22" width="30" height="1.5" rx="0.75" fill="#999" opacity=".5"/><rect x="9" y="34" width="42" height="1.5" rx="0.75" fill="#999" opacity=".4"/>',60,68);},
+ explain:{en:"Wet or soiled paper → residual bin. Contamination overrides the material.",fr:"Papier mouillé ou souillé → poubelle noire.",de:"Nasses oder verschmutztes Papier → Restmüll.",lb:"Nasse Zeitung → Reschtmüll."}},
+
+// ══════════════════════════════════════════════════════════════════════════════
+// GLASS
+// ══════════════════════════════════════════════════════════════════════════════
+{id:"wine_bottle",name:"Wine bottle (glass)",
+ desc:"An empty dark-green glass bottle, 75 cl.",
+ hint:"Remove the cork before dropping it in — cork goes in residual.",
+ bin:"glass",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="26" y="2" width="8" height="7" rx="3" fill="#8B5A2B"/><rect x="23" y="9" width="14" height="8" rx="3" fill="#2d5a27"/><rect x="18" y="17" width="24" height="7" rx="2" fill="#2d5a27"/><rect x="12" y="24" width="36" height="40" rx="11" fill="#3a7030"/><rect x="12" y="56" width="36" height="8" rx="8" fill="#2d5a27"/><rect x="14" y="32" width="6" height="22" rx="3" fill="#fff" opacity=".13"/><rect x="18" y="36" width="24" height="14" rx="3" fill="#fff" opacity=".1"/><text x="30" y="45" text-anchor="middle" font-size="6" fill="#c8f0b8" font-family="sans-serif">WINE</text>',60,68);},
+ explain:{en:"Glass bottles → Glascontainer. Remove cork first (cork → residual).",fr:"Bouteilles en verre → conteneur à verre. Enlevez le bouchon.",de:"Glasflaschen → Glascontainer. Korken vorher entfernen.",lb:"Glasfläschen → Glascontainer."}},
+
+{id:"glass_jar",name:"Empty glass jar",
+ desc:"A clear glass food preserving jar, empty and rinsed.",
+ hint:"Remove the metal lid first — it goes in PMC, not glass.",
+ bin:"glass",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="19" y="4" width="22" height="6" rx="2" fill="#888"/><rect x="17" y="10" width="26" height="4" rx="2" fill="#aaa"/><rect x="10" y="14" width="40" height="48" rx="9" fill="#cce8d8" opacity=".8"/><rect x="10" y="14" width="40" height="48" rx="9" fill="none" stroke="#88b898" stroke-width="1.5"/><rect x="12" y="22" width="7" height="30" rx="3.5" fill="#fff" opacity=".32"/>',60,68);},
+ explain:{en:"Glass jars → Glascontainer. Remove metal lid (lid → PMC).",fr:"Bocaux → conteneur à verre. Enlevez le couvercle métallique.",de:"Glasgläser → Glascontainer. Metalldeckel entfernen.",lb:"Glasdotten → Glascontainer."}},
+
+{id:"olive_oil_bottle",name:"Olive oil bottle (glass)",
+ desc:"An empty rinsed green glass bottle that held olive oil.",
+ hint:"The paper label can stay on — the sorting process handles it.",
+ bin:"glass",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="26" y="2" width="8" height="5" rx="2" fill="#888"/><rect x="24" y="7" width="12" height="6" rx="3" fill="#a0a050"/><rect x="20" y="13" width="20" height="4" rx="2" fill="#b0b060"/><rect x="12" y="17" width="36" height="48" rx="10" fill="#d4d870" opacity=".9"/><rect x="12" y="17" width="36" height="48" rx="10" fill="none" stroke="#a0a040" stroke-width="1"/><rect x="14" y="25" width="6" height="30" rx="3" fill="#fff" opacity=".25"/><rect x="18" y="30" width="24" height="22" rx="3" fill="#fff" opacity=".15"/><text x="30" y="42" text-anchor="middle" font-size="5.5" fill="#6a6a20" font-family="sans-serif" font-weight="700">OLIVE OIL</text>',60,68);},
+ explain:{en:"Glass bottles → Glascontainer after rinsing.",fr:"Bouteilles en verre → conteneur à verre.",de:"Glasflaschen → Glascontainer.",lb:"Glasfläschen → Glascontainer."}},
+
+{id:"perfume_bottle",name:"Perfume bottle (glass)",
+ desc:"An empty glass perfume bottle with a metal spray pump still attached.",
+ hint:"The glass body goes in glass — but remove the metal/plastic spray pump first (pump → residual).",
+ bin:"glass",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="26" y="2" width="8" height="10" rx="3" fill="#888"/><rect x="22" y="12" width="16" height="6" rx="2" fill="#c8c0e0"/><rect x="16" y="18" width="28" height="44" rx="8" fill="#d0c8f0" opacity=".9"/><rect x="16" y="18" width="28" height="44" rx="8" fill="none" stroke="#a098d0" stroke-width="1.5"/><rect x="18" y="26" width="8" height="28" rx="4" fill="#fff" opacity=".25"/><rect x="22" y="30" width="16" height="18" rx="3" fill="#fff" opacity=".12"/><text x="30" y="40" text-anchor="middle" font-size="5" fill="#8070b0" font-family="sans-serif">PARFUM</text>',60,68);},
+ explain:{en:"Glass perfume bottle → glass bin after removing metal/plastic spray pump (pump → residual).",fr:"Flacon de parfum en verre → conteneur à verre (retirez la pompe → poubelle noire).",de:"Glasparfümflakon → Glascontainer (Pumpe entfernen → Restmüll).",lb:"Parfumfläschchen → Glascontainer (Pump → Reschtmüll)."}},
+
+{id:"window_glass",name:"Broken window pane",
+ desc:"A shard of flat transparent window glass with a sharp edge.",
+ hint:"Flat glass melts at a completely different temperature than bottle glass — mixing them ruins the batch.",
+ bin:"residual",level:3,age:"all",
+ svg:function(){return mksvg('<rect x="8" y="8" width="44" height="52" rx="2" fill="#b8d8f0" opacity=".6"/><rect x="8" y="8" width="44" height="52" rx="2" fill="none" stroke="#78a8d0" stroke-width="2"/><rect x="6" y="6" width="48" height="8" rx="2" fill="#8ab0d0"/><rect x="6" y="54" width="48" height="6" rx="2" fill="#8ab0d0"/><rect x="6" y="6" width="8" height="54" rx="2" fill="#8ab0d0"/><rect x="46" y="6" width="8" height="54" rx="2" fill="#8ab0d0"/><path d="M30 10 L52 40" stroke="#78a8d0" stroke-width="2" fill="none"/><path d="M30 10 L18 58" stroke="#78a8d0" stroke-width="1.5" fill="none"/>',60,68);},
+ explain:{en:"Flat/window glass is NOT bottle glass — different melting point → must go to a Waste Centre.",fr:"Verre plat ≠ verre bouteille → centre de collecte.",de:"Fensterglas ≠ Flaschenglas → Wertstoffhof.",lb:"Fensterglas ass NET Flascheglas → Recyclage-Zentrum."}},
+
+{id:"ceramic_mug",name:"Broken ceramic mug",
+ desc:"A cracked ceramic coffee mug with a broken handle.",
+ hint:"Ceramic has a far higher melting point than glass — it destroys a glass furnace batch.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<path d="M12 20 L10 58 Q10 64 30 64 Q50 64 50 58 L48 20Z" fill="#e8d0c0"/><rect x="10" y="14" width="40" height="8" rx="4" fill="#f0ddd0"/><path d="M48 28 Q58 28 58 38 Q58 48 48 48" stroke="#e8d0c0" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M24 20 L20 50" stroke="#c8a888" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M20 50 L32 58" stroke="#c8a888" stroke-width="1.5" fill="none" stroke-linecap="round"/>',60,68);},
+ explain:{en:"Ceramics are NOT glass — they contaminate glass recycling → residual bin or Waste Centre.",fr:"La céramique N'EST PAS du verre → poubelle noire.",de:"Keramik ist KEIN Glas → Restmüll.",lb:"Keramik ass KEEN Glas → Reschtmüll."}},
+
+{id:"terracotta_pot",name:"Broken terracotta pot",
+ desc:"A cracked orange clay flower pot — clearly pottery.",
+ hint:"Pottery and terracotta melt at a completely different temperature — they ruin glass recycling.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<path d="M9 52 Q9 64 30 64 Q51 64 51 52 L45 22 Q44 16 30 16 Q16 16 15 22Z" fill="#c06030"/><rect x="13" y="12" width="34" height="8" rx="4" fill="#d07040"/><path d="M30 16 L27 12" stroke="#a04020" stroke-width="1.5" fill="none"/><path d="M27 12 L22 32 L32 42" stroke="#a04020" stroke-width="2" fill="none" stroke-linecap="round"/>',60,68);},
+ explain:{en:"Ceramics and terracotta are NOT glass → residual bin or Waste Centre.",fr:"La céramique N'EST PAS du verre → poubelle noire.",de:"Keramik ist KEIN Glas → Restmüll.",lb:"Keramik ass KEEN Glas → Reschtmüll."}},
+
+{id:"fluorescent_bulb",name:"Fluorescent / energy-saving bulb",
+ desc:"A used spiral energy-saving CFL bulb or fluorescent tube.",
+ hint:"Contains mercury — must go to a special collection point, not the glass bin.",
+ bin:"residual",level:2,age:"all",special:"hazardous",
+ svg:function(){return mksvg('<rect x="26" y="2" width="8" height="8" rx="2" fill="#c8c8c8"/><rect x="28" y="10" width="4" height="6" rx="1" fill="#aaa"/><path d="M20 16 Q14 28 20 36 Q26 44 30 44 Q34 44 40 36 Q46 28 40 16Z" fill="#e8f8a0" opacity=".8"/><path d="M20 16 Q14 28 20 36 Q26 44 30 44 Q34 44 40 36 Q46 28 40 16Z" fill="none" stroke="#a0c020" stroke-width="1.5"/><path d="M24 20 Q20 30 24 38" stroke="#c0d840" stroke-width="1" fill="none" opacity=".5"/><rect x="20" y="44" width="20" height="10" rx="4" fill="#c8c8c8"/>',60,68);},
+ explain:{en:"Fluorescent/CFL bulbs contain mercury → special collection point (supermarkets, Waste Centre). Never glass bin.",fr:"Ampoules fluocompactes (contiennent du mercure) → point de collecte spécial.",de:"Energiesparlampen (enthalten Quecksilber) → Sondersammelstelle.",lb:"Energiesparlampen → Sondersammelstell."}},
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PMC — Plastic, Metal & Cartons
+// ══════════════════════════════════════════════════════════════════════════════
+{id:"cola_bottle",name:"Cola plastic bottle",
+ desc:"A 500 ml transparent red-labelled PET bottle.",
+ hint:"Rinse it out and squash flat. Caps can stay on since Valorlux's 2024 update.",
+ bin:"plastic",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="22" y="2" width="16" height="5" rx="2.5" fill="#cc2200"/><rect x="18" y="7" width="24" height="5" rx="2" fill="#bb3300"/><rect x="13" y="12" width="34" height="50" rx="12" fill="#dd4422"/><rect x="13" y="12" width="34" height="14" rx="10" fill="#cc3311"/><rect x="13" y="52" width="34" height="10" rx="8" fill="#cc3311"/><rect x="15" y="22" width="5" height="28" rx="2.5" fill="#fff" opacity=".15"/><rect x="18" y="28" width="24" height="12" rx="3" fill="#fff" opacity=".12"/><text x="30" y="37" text-anchor="middle" font-size="7" fill="#fff" font-family="sans-serif" font-weight="700">COLA</text>',60,68);},
+ explain:{en:"Plastic bottles → PMC (yellow) bag. Caps can stay on since 2024.",fr:"Bouteilles plastique → sac PMC. Bouchons depuis 2024.",de:"Plastikflaschen → gelber PMC-Sack.",lb:"Plastikfläschen → giele PMC-Sak."}},
+
+{id:"milk_carton",name:"Milk carton (Tetra Pak)",
+ desc:"A 1-litre rectangular gable-top carton for milk.",
+ hint:"Rinse and flatten — the carton goes in PMC. Caps on is fine.",
+ bin:"plastic",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="10" y="22" width="40" height="42" rx="2" fill="#f8f8f8" stroke="#ddd" stroke-width="1"/><polygon points="10,22 30,8 50,22" fill="#ececec" stroke="#ddd" stroke-width="1"/><line x1="30" y1="8" x2="30" y2="22" stroke="#ccc" stroke-width="1"/><rect x="10" y="22" width="40" height="5" fill="#dbeef8"/><rect x="10" y="42" width="40" height="16" rx="1" fill="#dbeef8"/><text x="30" y="52" text-anchor="middle" font-size="8" fill="#1a6a9a" font-family="sans-serif" font-weight="700">MILK</text><text x="30" y="60" text-anchor="middle" font-size="6" fill="#3a8aba" font-family="sans-serif">1L</text>',60,68);},
+ explain:{en:"Beverage cartons (Tetra Pak) → PMC yellow bag. Rinse first!",fr:"Briques alimentaires → sac PMC jaune.",de:"Getränkekartons → gelber PMC-Sack.",lb:"Getränkskartons → giele PMC-Sak."}},
+
+{id:"alu_can",name:"Aluminium drink can",
+ desc:"A 33 cl steel or aluminium soda/beer can.",
+ hint:"Metal packaging goes in the PMC yellow bag — not the residual bin.",
+ bin:"plastic",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="13" y="10" width="34" height="50" rx="9" fill="#c8c8c8"/><rect x="13" y="10" width="34" height="9" rx="9" fill="#a8a8a8"/><rect x="13" y="51" width="34" height="9" rx="9" fill="#a8a8a8"/><rect x="17" y="5" width="26" height="7" rx="4" fill="#b0b0b0"/><rect x="20" y="3" width="7" height="5" rx="2" fill="#888"/><rect x="16" y="4" width="11" height="3" rx="1.5" fill="#666"/><rect x="15" y="21" width="5" height="22" rx="2.5" fill="#fff" opacity=".2"/><rect x="17" y="25" width="26" height="14" rx="3" fill="#fff" opacity=".1"/><text x="30" y="34" text-anchor="middle" font-size="7" fill="#444" font-family="sans-serif" font-weight="700">SODA</text>',60,68);},
+ explain:{en:"Metal cans → PMC yellow bag. Plastic, metal & cartons all together!",fr:"Canettes → sac PMC jaune.",de:"Metallkannen → gelber PMC-Sack.",lb:"Metalldosen → giele PMC-Sak."}},
+
+{id:"shampoo_bottle",name:"Shampoo bottle",
+ desc:"An empty plastic pump dispenser bottle for shampoo.",
+ hint:"Rinse it out — a thin residue is fine, thick product remaining is not.",
+ bin:"plastic",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="24" y="2" width="12" height="8" rx="3" fill="#6a42a0"/><rect x="22" y="10" width="16" height="6" rx="2" fill="#8a62c0"/><rect x="13" y="16" width="34" height="48" rx="13" fill="#9a72d0"/><rect x="13" y="54" width="34" height="10" rx="7" fill="#6a42a0"/><rect x="15" y="24" width="5" height="28" rx="2.5" fill="#fff" opacity=".18"/><rect x="17" y="30" width="26" height="15" rx="3" fill="#fff" opacity=".13"/><text x="30" y="40" text-anchor="middle" font-size="6" fill="#4a2080" font-family="sans-serif" font-weight="700">SHAMPOO</text>',60,68);},
+ explain:{en:"Empty plastic bottles → PMC yellow bag. Rinse first.",fr:"Flacons plastiques vides → sac PMC jaune.",de:"Leere Plastikflaschen → gelber PMC-Sack.",lb:"Eidel Plastikfläschen → giele PMC-Sak."}},
+
+{id:"yogurt_pot",name:"Plastic yogurt pot",
+ desc:"A small white plastic tub that held yogurt, now empty.",
+ hint:"Rinse out visible yogurt residue — a dry pot goes straight in PMC.",
+ bin:"plastic",level:1,age:"all",
+ svg:function(){return mksvg('<path d="M14 16 L10 60 Q10 66 30 66 Q50 66 50 60 L46 16Z" fill="#f0f0f8"/><rect x="12" y="10" width="36" height="8" rx="4" fill="#e0e0ee"/><rect x="12" y="16" width="36" height="2" fill="#c8c8e0"/><rect x="16" y="24" width="28" height="24" rx="2" fill="#fff" opacity=".3"/><text x="30" y="36" text-anchor="middle" font-size="6.5" fill="#5050a0" font-family="sans-serif" font-weight="700">YOGURT</text><ellipse cx="30" cy="62" rx="20" ry="5" fill="#d0d0e8"/>',60,68);},
+ explain:{en:"Plastic food containers (yogurt pots) → PMC yellow bag.",fr:"Pots en plastique (yaourt) → sac PMC jaune.",de:"Kunststoffbehälter (Joghurtbecher) → gelber PMC-Sack.",lb:"Plastikdotten (Joghurt) → giele PMC-Sak."}},
+
+{id:"plastic_flower_pot",name:"Plastic flower pot",
+ desc:"A small round plastic nursery pot that held a plant.",
+ hint:"Accepted in the PMC bag since Valorlux's 2021 collection extension. Shake out soil first.",
+ bin:"plastic",level:2,age:"all",
+ svg:function(){return mksvg('<path d="M14 22 L10 56 Q10 62 30 62 Q50 62 50 56 L46 22Z" fill="#e07830"/><rect x="12" y="16" width="36" height="8" rx="4" fill="#f09040"/><rect x="14" y="22" width="32" height="4" fill="#d06820" opacity=".5"/><rect x="16" y="28" width="4" height="24" rx="2" fill="#c05810" opacity=".2"/><rect x="26" y="26" width="4" height="26" rx="2" fill="#c05810" opacity=".2"/><rect x="40" y="28" width="4" height="24" rx="2" fill="#c05810" opacity=".2"/>',60,68);},
+ explain:{en:"Plastic flower pots → PMC yellow bag since 2021. Shake soil out first.",fr:"Pots de fleurs en plastique → sac PMC depuis 2021. Videz la terre.",de:"Kunststoff-Blumentöpfe → PMC-Sack seit 2021. Erde herausschütteln.",lb:"Plastikblumentëpf → PMC-Sak zënter 2021."}},
+
+{id:"aerosol_can_empty",name:"Empty aerosol spray can",
+ desc:"A fully empty hairspray or deodorant aerosol can — no pressure left.",
+ hint:"Empty aerosol = metal can = PMC. Never put a pressurised can in any bin — it can explode.",
+ bin:"plastic",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="20" y="4" width="20" height="8" rx="4" fill="#a0a0b0"/><rect x="18" y="12" width="24" height="4" rx="2" fill="#b0b0c0"/><rect x="16" y="16" width="28" height="46" rx="8" fill="#c0c8e0"/><rect x="16" y="52" width="28" height="10" rx="5" fill="#a0a8c8"/><rect x="18" y="22" width="6" height="28" rx="3" fill="#fff" opacity=".2"/><text x="30" y="38" text-anchor="middle" font-size="5.5" fill="#4050a0" font-family="sans-serif" font-weight="700">HAIR</text><text x="30" y="45" text-anchor="middle" font-size="5.5" fill="#4050a0" font-family="sans-serif" font-weight="700">SPRAY</text>',60,68);},
+ explain:{en:"Empty aerosol can → PMC yellow bag. ONLY if fully empty and depressurised.",fr:"Aérosol vide → sac PMC. UNIQUEMENT si complètement vide.",de:"Leere Aerosoldose → gelber PMC-Sack. NUR wenn vollständig leer.",lb:"Eidel Aerosoldos → PMC-Sak. NUR wann komplett eidel."}},
+
+{id:"plastic_bag_clean",name:"Clean plastic bag / film",
+ desc:"A clean, dry thin plastic shopping bag or cling film.",
+ hint:"Clean and dry plastic film is accepted in PMC in Luxembourg since 2021.",
+ bin:"plastic",level:2,age:"all",
+ svg:function(){return mksvg('<path d="M16 18 Q30 12 44 18 L46 56 Q44 62 30 64 Q16 62 14 56Z" fill="#c8e8f8" opacity=".85"/><path d="M20 18 L18 56" stroke="#88c8e8" stroke-width="1" fill="none"/><path d="M40 18 L42 56" stroke="#88c8e8" stroke-width="1" fill="none"/><rect x="22" y="6" width="7" height="14" rx="3.5" fill="#b0d8f0"/><rect x="31" y="6" width="7" height="14" rx="3.5" fill="#a8d0e8"/><ellipse cx="25.5" cy="6" rx="3.5" ry="2.5" fill="#a8d0e8"/><ellipse cx="34.5" cy="6" rx="3.5" ry="2.5" fill="#a0c8e0"/>',60,68);},
+ explain:{en:"Clean, dry plastic bags and film → PMC yellow bag. Must be clean and dry.",fr:"Sacs et films plastiques propres et secs → sac PMC.",de:"Saubere, trockene Plastiktüten und -folien → gelber PMC-Sack.",lb:"Sauber a trocken Plastikstéit → PMC-Sak."}},
+
+{id:"metal_tin",name:"Metal food tin (clean)",
+ desc:"An empty clean steel food tin — tomatoes, beans, or tuna.",
+ hint:"Rinse it out — metal tins go in PMC alongside plastic and cartons.",
+ bin:"plastic",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="14" y="12" width="32" height="48" rx="6" fill="#c0c8d0"/><rect x="14" y="12" width="32" height="8" rx="6" fill="#a8b0b8"/><rect x="14" y="52" width="32" height="8" rx="6" fill="#a8b0b8"/><rect x="16" y="18" width="6" height="30" rx="3" fill="#fff" opacity=".2"/><rect x="18" y="24" width="24" height="16" rx="2" fill="#fff" opacity=".1"/><text x="30" y="34" text-anchor="middle" font-size="6" fill="#607080" font-family="sans-serif" font-weight="700">BEANS</text>',60,68);},
+ explain:{en:"Steel/tin food cans → PMC yellow bag. Rinse first.",fr:"Boîtes de conserve en métal → sac PMC. Rincez d'abord.",de:"Metallkonservendosen → gelber PMC-Sack. Vorher ausspülen.",lb:"Konservendosen → PMC-Sak."}},
+
+{id:"bubble_wrap",name:"Bubble wrap",
+ desc:"A sheet of clear plastic bubble wrap used for packaging.",
+ hint:"Plastic film and wrap is accepted in PMC if clean and dry.",
+ bin:"plastic",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="6" y="14" width="48" height="38" rx="4" fill="#d8f0f8" opacity=".8"/><circle cx="16" cy="24" r="4" fill="none" stroke="#80c0d8" stroke-width="1.2"/><circle cx="26" cy="24" r="4" fill="none" stroke="#80c0d8" stroke-width="1.2"/><circle cx="36" cy="24" r="4" fill="none" stroke="#80c0d8" stroke-width="1.2"/><circle cx="46" cy="24" r="4" fill="none" stroke="#80c0d8" stroke-width="1.2"/><circle cx="21" cy="34" r="4" fill="none" stroke="#80c0d8" stroke-width="1.2"/><circle cx="31" cy="34" r="4" fill="none" stroke="#80c0d8" stroke-width="1.2"/><circle cx="41" cy="34" r="4" fill="none" stroke="#80c0d8" stroke-width="1.2"/><circle cx="16" cy="44" r="4" fill="none" stroke="#80c0d8" stroke-width="1.2"/><circle cx="26" cy="44" r="4" fill="none" stroke="#80c0d8" stroke-width="1.2"/><circle cx="36" cy="44" r="4" fill="none" stroke="#80c0d8" stroke-width="1.2"/>',60,68);},
+ explain:{en:"Clean bubble wrap → PMC yellow bag. Plastic film accepted since 2021.",fr:"Papier bulle propre → sac PMC.",de:"Saubere Luftpolsterfolie → gelber PMC-Sack.",lb:"Bubbelfolie → PMC-Sak."}},
+
+{id:"pringles_tube",name:"Pringles tube",
+ desc:"An empty cylindrical Pringles chip container with a metal base and plastic lid.",
+ hint:"Three materials in one — cardboard body, metal base, plastic lid — none separable without industrial tools.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="20" y="4" width="20" height="6" rx="3" fill="#e03020"/><rect x="18" y="10" width="24" height="4" rx="2" fill="#c82010"/><rect x="16" y="14" width="28" height="44" rx="4" fill="#e84030"/><rect x="16" y="50" width="28" height="8" rx="3" fill="#888"/><rect x="18" y="18" width="6" height="28" rx="3" fill="#fff" opacity=".15"/><text x="30" y="34" text-anchor="middle" font-size="7" fill="#fff" font-family="sans-serif" font-weight="700">CRISPS</text>',60,68);},
+ explain:{en:"Pringles tubes are composite (cardboard + metal base + plastic lid) — cannot be separated → residual bin.",fr:"Tubes Pringles (carton + métal + plastique) inséparables → poubelle noire.",de:"Pringles-Dosen (Pappe + Metall + Plastik) untrennbar → Restmüll.",lb:"Pringles-Tuben → Reschtmüll."}},
+
+{id:"coffee_pod",name:"Coffee pod (Nespresso capsule)",
+ desc:"A small used aluminium coffee capsule.",
+ hint:"Aluminium but no standard PMC collection stream accepts it in Luxembourg — use Nespresso's own bags or Waste Centre.",
+ bin:"residual",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<ellipse cx="30" cy="30" rx="16" ry="14" fill="#c0b080"/><ellipse cx="30" cy="28" rx="14" ry="12" fill="#d4c490"/><path d="M16 32 Q22 44 30 46 Q38 44 44 32" fill="#b09870" opacity=".6"/><ellipse cx="30" cy="28" rx="8" ry="6" fill="#c8b880" opacity=".5"/><path d="M30 16 L30 10" stroke="#a09060" stroke-width="2" stroke-linecap="round"/>',60,68);},
+ explain:{en:"Nespresso capsules → residual or use Nespresso's dedicated collection bags. No standard PMC stream in Luxembourg.",fr:"Capsules Nespresso → poubelle noire ou sac de collecte Nespresso. Pas de flux PMC standard.",de:"Nespresso-Kapseln → Restmüll oder Nespresso-Sammelbeutel.",lb:"Nespresso-Kapselen → Reschtmüll oder Nespresso-Sammelsak."}},
+
+{id:"alu_foil_clean",name:"Aluminium foil (clean)",
+ desc:"A clean, dry piece of aluminium kitchen foil.",
+ hint:"Scrunch it into a ball bigger than 5cm — then it's accepted as metal in PMC.",
+ bin:"plastic",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="10" y="20" width="40" height="28" rx="3" fill="#d8d8e0"/><rect x="10" y="20" width="40" height="4" fill="#c0c0c8"/><path d="M10 24 Q20 22 30 26 Q40 28 50 24" stroke="#b8b8c0" stroke-width="1" fill="none" opacity=".5"/><path d="M10 30 Q20 28 30 32 Q40 34 50 30" stroke="#b8b8c0" stroke-width="1" fill="none" opacity=".4"/><rect x="12" y="22" width="8" height="22" rx="2" fill="#fff" opacity=".2"/><text x="30" y="42" text-anchor="middle" font-size="6" fill="#808090" font-family="sans-serif">alu foil</text>',60,68);},
+ explain:{en:"Clean aluminium foil → scrunch into a 5cm+ ball then place in PMC yellow bag.",fr:"Feuille alu propre → froissez-la en boule de 5cm+ puis sac PMC.",de:"Saubere Alufolie → zu 5cm+ Ball formen, dann PMC-Sack.",lb:"Sauber Alufolie → zu engem Ball formen, dann PMC-Sak."}},
+
+{id:"polystyrene",name:"Polystyrene / styrofoam",
+ desc:"White expanded polystyrene packaging foam from a box.",
+ hint:"Explicitly excluded from PMC in Luxembourg — it cannot be sorted or recycled in the standard stream.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="8" y="16" width="44" height="38" rx="4" fill="#f0f0f0"/><rect x="8" y="16" width="44" height="38" rx="4" fill="none" stroke="#d8d8d8" stroke-width="1.5"/><rect x="14" y="22" width="12" height="10" rx="2" fill="#e8e8e8"/><rect x="34" y="22" width="12" height="10" rx="2" fill="#e8e8e8"/><rect x="14" y="38" width="32" height="8" rx="2" fill="#e8e8e8"/><rect x="24" y="30" width="12" height="8" rx="2" fill="#f0f0f0"/>',60,68);},
+ explain:{en:"Polystyrene/styrofoam is explicitly excluded from PMC in Luxembourg → residual bin.",fr:"Polystyrène expansé → poubelle noire. Exclu explicitement du sac PMC.",de:"Styropor ist in Luxemburg explizit vom PMC-Sack ausgeschlossen → Restmüll.",lb:"Styroporfoam → Reschtmüll."}},
+
+{id:"black_plastic_tray",name:"Black plastic food tray",
+ desc:"A black plastic supermarket tray from meat or ready meals.",
+ hint:"Black plastic cannot be detected by the infrared sorting machines — it passes straight through as residual.",
+ bin:"residual",level:3,age:"all",
+ svg:function(){return mksvg('<rect x="8" y="20" width="44" height="32" rx="6" fill="#222"/><rect x="8" y="20" width="44" height="32" rx="6" fill="none" stroke="#444" stroke-width="1"/><rect x="10" y="22" width="40" height="4" rx="2" fill="#333"/><rect x="12" y="28" width="36" height="18" rx="3" fill="#2a2a2a"/><rect x="14" y="30" width="10" height="12" rx="2" fill="#333" opacity=".6"/>',60,68);},
+ explain:{en:"Black plastic trays cannot be sorted by infrared scanners → residual bin.",fr:"Les barquettes noires ne sont pas détectées par le tri infrarouge → poubelle noire.",de:"Schwarze Plastikschalen werden von Infrarot-Sortiermaschinen nicht erkannt → Restmüll.",lb:"Schwaarz Plastikschalen → Reschtmüll."}},
+
+// ══════════════════════════════════════════════════════════════════════════════
+// RESIDUAL — TRICKY COMPOSITE ITEMS
+// ══════════════════════════════════════════════════════════════════════════════
+{id:"foil_crisp_bag",name:"Foil crisp / chip bag",
+ desc:"A shiny metallic-looking sealed crisp bag, now empty.",
+ hint:"Inside is a bonded plastic-metal film — the two layers cannot be separated for recycling.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<path d="M18 8 Q30 4 42 8 L46 58 Q44 64 30 66 Q16 64 14 58Z" fill="#e8c030" opacity=".95"/><path d="M22 8 L20 58" stroke="#c8a010" stroke-width="1" fill="none"/><path d="M38 8 L40 58" stroke="#c8a010" stroke-width="1" fill="none"/><rect x="18" y="4" width="24" height="6" rx="3" fill="#c8a010"/><ellipse cx="30" cy="4" rx="12" ry="3.5" fill="#b89000"/><rect x="16" y="28" width="28" height="20" rx="3" fill="#fff" opacity=".2"/><text x="30" y="38" text-anchor="middle" font-size="6" fill="#7a5000" font-family="sans-serif" font-weight="700">CRISPS</text>',60,68);},
+ explain:{en:"Foil crisp bags are multilayer (plastic + metal film) → not separable → residual bin.",fr:"Sachets de chips (multicouche plastique/métal) → poubelle noire.",de:"Folie-Chipstüten (Mehrschicht) → Restmüll.",lb:"Chipstüten aus Folie → Reschtmüll."}},
+
+{id:"tissue_used",name:"Used paper tissue",
+ desc:"A crumpled, used single-ply paper tissue.",
+ hint:"Even though it's paper, contamination from use makes it residual — not paper.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<path d="M14 18 Q30 12 46 20 L43 56 Q30 62 17 56Z" fill="#f4f0e8"/><path d="M19 20 Q30 16 41 22 L38 52 Q30 56 22 52Z" fill="#fff" opacity=".55"/><path d="M21 28 Q28 24 36 28" stroke="#e0e0e0" stroke-width="1.2" fill="none"/><path d="M19 38 Q25 33 33 36 Q39 38 41 34" stroke="#e0e0e0" stroke-width="1.2" fill="none"/>',60,68);},
+ explain:{en:"Used tissues are contaminated → residual bin, not paper.",fr:"Mouchoirs usagés → poubelle noire, pas papier.",de:"Benutzte Taschentücher → Restmüll, nicht Papier.",lb:"Gebrauchte Tissue → Reschtmüll."}},
+
+{id:"sticky_tape",name:"Sticky tape / sellotape roll",
+ desc:"A partially used roll of clear adhesive sellotape on a plastic holder.",
+ hint:"Mixed plastic film and synthetic adhesive — not separable from the plastic.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<circle cx="30" cy="36" r="18" fill="#a8d8f0" opacity=".7"/><circle cx="30" cy="36" r="18" fill="none" stroke="#60a8d0" stroke-width="2"/><circle cx="30" cy="36" r="10" fill="#f0f8ff"/><circle cx="30" cy="36" r="10" fill="none" stroke="#60a8d0" stroke-width="1.5"/><rect x="28" y="10" width="8" height="12" rx="2" fill="#e0f0f8"/>',60,68);},
+ explain:{en:"Sticky tape is mixed plastic + synthetic adhesive → residual bin.",fr:"Ruban adhésif (plastique + colle synthétique) → poubelle noire.",de:"Klebeband (Plastik + Synthesekleber) → Restmüll.",lb:"Klebeband → Reschtmüll."}},
+
+{id:"toothpaste_tube",name:"Toothpaste tube",
+ desc:"An empty squeezed-out toothpaste tube.",
+ hint:"Toothpaste tubes are multilayer (aluminium lined with plastic) — the layers cannot be separated.",
+ bin:"residual",level:3,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="24" y="4" width="12" height="8" rx="4" fill="#40a0c0"/><rect x="22" y="12" width="16" height="4" rx="2" fill="#50b0d0"/><rect x="14" y="16" width="32" height="38" rx="4" fill="#60c0e0"/><rect x="14" y="44" width="32" height="10" rx="2" fill="#40a0c0"/><path d="M14 48 Q20 52 30 52 Q40 52 46 48" fill="#30c0a0" opacity=".4"/><rect x="16" y="20" width="6" height="22" rx="3" fill="#fff" opacity=".18"/><text x="30" y="36" text-anchor="middle" font-size="5.5" fill="#fff" font-family="sans-serif" font-weight="700">TOOTH</text><text x="30" y="43" text-anchor="middle" font-size="5.5" fill="#fff" font-family="sans-serif" font-weight="700">PASTE</text>',60,68);},
+ explain:{en:"Toothpaste tubes are multilayer (aluminium + plastic) — not separable → residual bin.",fr:"Tubes de dentifrice (alu + plastique multicouche) → poubelle noire.",de:"Zahnpastatuben (Alu + Kunststoff, mehrschichtig) → Restmüll.",lb:"Zoumpasttube → Reschtmüll."}},
+
+{id:"cotton_bud_plastic",name:"Cotton bud (plastic stem)",
+ desc:"A standard cotton bud / Q-tip with a white plastic stem.",
+ hint:"Never flush down the toilet — they block sewers. Plastic stem means residual bin.",
+ bin:"residual",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="28" y="8" width="4" height="52" rx="2" fill="#f0f0f0"/><ellipse cx="30" cy="10" rx="7" ry="5" fill="#f8f8f8"/><ellipse cx="30" cy="10" rx="5" ry="3.5" fill="#fff"/><ellipse cx="30" cy="58" rx="7" ry="5" fill="#f8f8f8"/><ellipse cx="30" cy="58" rx="5" ry="3.5" fill="#fff"/>',60,68);},
+ explain:{en:"Plastic-stemmed cotton buds → residual bin. Never flush — they block sewers.",fr:"Cotons-tiges à tige plastique → poubelle noire. Ne jamais jeter dans les toilettes.",de:"Wattestäbchen (Plastikstiel) → Restmüll. Niemals in die Toilette.",lb:"Wattesteiwer (Plastikstiel) → Reschtmüll."}},
+
+{id:"cotton_bud_paper",name:"Cotton bud (paper stem)",
+ desc:"An eco cotton bud / Q-tip with a paper/bamboo stem.",
+ hint:"Paper stem + cotton = organic. But plastic stems are still residual.",
+ bin:"organic",level:3,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="28" y="8" width="4" height="52" rx="2" fill="#d4b880"/><ellipse cx="30" cy="10" rx="7" ry="5" fill="#f0ece0"/><ellipse cx="30" cy="10" rx="5" ry="3.5" fill="#f8f4e8"/><ellipse cx="30" cy="58" rx="7" ry="5" fill="#f0ece0"/><ellipse cx="30" cy="58" rx="5" ry="3.5" fill="#f8f4e8"/><rect x="26" y="28" width="8" height="2" rx="1" fill="#c0a060" opacity=".4"/>',60,68);},
+ explain:{en:"Paper/bamboo stem cotton buds → organic bin. Cotton + paper = compostable.",fr:"Cotons-tiges à tige papier/bambou → poubelle organique.",de:"Wattestäbchen (Papier/Bambus-Stiel) → Bio-Tonne.",lb:"Wattesteiwer (Pabeier-Stiel) → Bio-Tonne."}},
+
+{id:"toothbrush",name:"Plastic toothbrush",
+ desc:"An old plastic toothbrush with nylon bristles.",
+ hint:"Composite plastic with nylon bristles — cannot go in PMC. Residual bin.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="26" y="4" width="8" height="48" rx="4" fill="#40a0d0"/><rect x="22" y="44" width="16" height="16" rx="4" fill="#3090c0"/><rect x="22" y="44" width="16" height="4" fill="#2880b0"/><rect x="24" y="46" width="3" height="10" rx="1.5" fill="#fff" opacity=".6"/><rect x="28" y="46" width="3" height="10" rx="1.5" fill="#fff" opacity=".6"/><rect x="32" y="46" width="3" height="10" rx="1.5" fill="#fff" opacity=".6"/>',60,68);},
+ explain:{en:"Plastic toothbrushes are composite (hard plastic + nylon) → residual bin.",fr:"Brosses à dents plastiques (plastique + nylon) → poubelle noire.",de:"Kunststoff-Zahnbürsten (Hartplastik + Nylon) → Restmüll.",lb:"Plastikzänebürscht → Reschtmüll."}},
+
+{id:"bamboo_toothbrush",name:"Bamboo toothbrush",
+ desc:"An eco toothbrush with a bamboo handle and nylon bristles.",
+ hint:"Remove the nylon bristles with pliers first — handle → organic, bristles → residual.",
+ bin:"organic",level:3,age:"all",
+ svg:function(){return mksvg('<rect x="26" y="4" width="8" height="48" rx="4" fill="#c8a860"/><rect x="24" y="14" width="3" height="2" rx="1" fill="#a88840" opacity=".5"/><rect x="24" y="20" width="3" height="2" rx="1" fill="#a88840" opacity=".5"/><rect x="24" y="26" width="3" height="2" rx="1" fill="#a88840" opacity=".5"/><rect x="22" y="44" width="16" height="16" rx="4" fill="#b09050"/><rect x="24" y="46" width="3" height="10" rx="1.5" fill="#e8e0c8" opacity=".7"/><rect x="28" y="46" width="3" height="10" rx="1.5" fill="#e8e0c8" opacity=".7"/><rect x="32" y="46" width="3" height="10" rx="1.5" fill="#e8e0c8" opacity=".7"/>',60,68);},
+ explain:{en:"Bamboo toothbrush: pull out nylon bristles (→ residual) then handle → organic bin.",fr:"Brosse à dents bambou: retirez les poils nylon (→ poubelle noire) puis manche → organique.",de:"Bambus-Zahnbürste: Nylonborsten entfernen (→ Restmüll), Griff → Bio-Tonne.",lb:"Bambuszänebürscht: Nylonbouschdelen ewechhuelen (→ Reschtmüll), Grëff → Bio-Tonne."}},
+
+{id:"wax_candle",name:"Wax candle stub",
+ desc:"The burned-down remnant of a paraffin wax candle with a metal wick holder.",
+ hint:"Paraffin wax is petroleum-derived — not organic, not recyclable as plastic.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="20" y="28" width="20" height="34" rx="4" fill="#f5e8c0"/><rect x="20" y="28" width="20" height="34" rx="4" fill="none" stroke="#e0d0a0" stroke-width="1"/><rect x="28" y="20" width="4" height="10" rx="1" fill="#c8a040"/><ellipse cx="30" cy="20" rx="5" ry="3" fill="#ff8020" opacity=".6"/><ellipse cx="30" cy="18" rx="3" ry="4" fill="#ffa020" opacity=".4"/><rect x="22" y="32" width="5" height="24" rx="2" fill="#f0dca8" opacity=".4"/><ellipse cx="30" cy="62" rx="10" ry="3" fill="#e0d098" opacity=".5"/>',60,68);},
+ explain:{en:"Paraffin wax candle → residual bin. Petroleum-derived — not organic or recyclable plastic.",fr:"Bougie en paraffine → poubelle noire. Dérivé du pétrole.",de:"Paraffinkerze → Restmüll. Erdölderivat — nicht kompostierbar.",lb:"Paraffinkerz → Reschtmüll."}},
+
+{id:"razor",name:"Disposable razor",
+ desc:"A single-use plastic razor with a fixed metal blade cartridge.",
+ hint:"Plastic handle and metal blades are fused — impossible to separate for recycling.",
+ bin:"residual",level:3,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="26" y="4" width="8" height="38" rx="4" fill="#3a80c0"/><rect x="22" y="36" width="16" height="8" rx="2" fill="#2a60a0"/><rect x="18" y="28" width="24" height="12" rx="3" fill="#c0c0c0"/><rect x="18" y="28" width="24" height="3" rx="1" fill="#e0e0e0"/><rect x="18" y="33" width="24" height="2" rx="1" fill="#d0d0d0"/><rect x="28" y="8" width="4" height="26" rx="2" fill="#5aa0e0" opacity=".4"/>',60,68);},
+ explain:{en:"Disposable razors are composite (plastic + metal blades) → residual bin.",fr:"Rasoirs jetables (plastique + métal) → poubelle noire.",de:"Einwegrasier (Plastik + Metallklingen) → Restmüll.",lb:"Wegwerfrasier → Reschtmüll."}},
+
+{id:"biodeg_bag",name:"'Biodegradable' plastic bag",
+ desc:"A thin shopping bag marked 'biodegradable' or 'compostable' in green print.",
+ hint:"Only bags certified 'OK compost HOME' are accepted in LU organic bin — standard 'biodegradable' labels do not qualify.",
+ bin:"residual",level:3,age:"all",
+ svg:function(){return mksvg('<path d="M17 14 Q30 8 43 14 L45 56 Q44 62 30 64 Q16 62 15 56Z" fill="#c8e0b0" opacity=".9"/><path d="M21 14 L19 56" stroke="#90c060" stroke-width="1" fill="none"/><path d="M39 14 L41 56" stroke="#90c060" stroke-width="1" fill="none"/><rect x="20" y="4" width="9" height="12" rx="4.5" fill="#c0d8a8"/><rect x="31" y="4" width="9" height="12" rx="4.5" fill="#b8d0a0"/><ellipse cx="24.5" cy="4" rx="4.5" ry="3" fill="#b8d0a0"/><ellipse cx="35.5" cy="4" rx="4.5" ry="3" fill="#b0c898"/><rect x="17" y="30" width="26" height="18" rx="3" fill="#fff" opacity=".45"/><text x="30" y="39" text-anchor="middle" font-size="6" fill="#406820" font-family="sans-serif" font-weight="700">BIO</text><text x="30" y="46" text-anchor="middle" font-size="5" fill="#406820" font-family="sans-serif">degradable</text>',60,68);},
+ explain:{en:"Standard 'biodegradable' bags are NOT accepted in organic bin in Luxembourg → residual.",fr:"Sacs biodégradables standard → poubelle noire. Pas dans l'organique!",de:"Standard 'biologisch abbaubare' Tüten → Restmüll!",lb:"Standard 'biologesch ofbaubar' Stéit → Reschtmüll."}},
+
+{id:"latex_glove",name:"Disposable latex glove",
+ desc:"A thin used disposable latex examination glove.",
+ hint:"Mixed synthetic rubber and polymer — not organic, not recyclable.",
+ bin:"residual",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<path d="M26 58 L24 28 Q24 20 28 18 Q30 17 32 18 Q36 20 36 28 L34 58Z" fill="#e8e0d0"/><path d="M24 28 L18 20 Q16 16 20 14 Q24 13 26 18"/><path d="M20 22 L14 18 Q12 14 16 13 Q20 12 21 17"/><path d="M36 28 L42 22 Q44 18 40 16 Q36 15 34 20"/><path d="M42 22 L46 16 Q48 12 44 11 Q40 10 39 15"/><rect x="22" y="52" width="16" height="8" rx="4" fill="#d8d0c0"/>',60,68);},
+ explain:{en:"Disposable latex gloves → residual bin.",fr:"Gants jetables en latex → poubelle noire.",de:"Einweg-Latexhandschuhe → Restmüll.",lb:"Wegwerflatexhandschong → Reschtmüll."}},
+
+{id:"printer_cartridge",name:"Printer ink cartridge",
+ desc:"An empty plastic inkjet printer cartridge.",
+ hint:"Many supermarkets and electronics stores have dedicated cartridge collection boxes.",
+ bin:"residual",level:3,age:"adult_senior",special:"ewaste",
+ svg:function(){return mksvg('<rect x="12" y="18" width="36" height="28" rx="4" fill="#222"/><rect x="12" y="18" width="36" height="28" rx="4" fill="none" stroke="#444" stroke-width="1"/><rect x="14" y="22" width="10" height="18" rx="2" fill="#111"/><rect x="26" y="22" width="10" height="18" rx="2" fill="#111"/><rect x="38" y="22" width="8" height="18" rx="2" fill="#111"/><rect x="14" y="46" width="32" height="8" rx="2" fill="#333"/><rect x="16" y="48" width="28" height="4" rx="1" fill="#444"/>',60,68);},
+ explain:{en:"Printer cartridges → dedicated collection boxes in supermarkets/electronics stores or Waste Centre.",fr:"Cartouches imprimante → boîtes de collecte en supermarchés ou centre de collecte.",de:"Druckerpatronen → Sammelboxen in Supermärkten oder Wertstoffhof.",lb:"Dreckerkassetten → Sammelkäscht am Supermarché."}},
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HAZARDOUS & SPECIAL COLLECTION
+// ══════════════════════════════════════════════════════════════════════════════
+{id:"battery_aa",name:"AA battery",
+ desc:"A standard 1.5V alkaline AA battery.",
+ hint:"Look for the small battery collection box near supermarket checkouts — free to use.",
+ bin:"residual",level:2,age:"all",special:"battery",
+ svg:function(){return mksvg('<rect x="16" y="10" width="28" height="52" rx="7" fill="#e0d818"/><rect x="22" y="5" width="16" height="7" rx="3" fill="#c8c8c8"/><rect x="26" y="3" width="8" height="4" rx="2" fill="#aaa"/><rect x="16" y="54" width="28" height="8" rx="5" fill="#c0b810"/><rect x="18" y="14" width="24" height="38" rx="4" fill="#c8c010" opacity=".5"/><text x="30" y="30" text-anchor="middle" font-size="8" fill="#706000" font-family="sans-serif" font-weight="700">AA</text><text x="30" y="40" text-anchor="middle" font-size="6" fill="#706000" font-family="sans-serif">1.5V</text>',60,68);},
+ explain:{en:"Batteries → dedicated collection boxes in supermarkets. Never in regular bins!",fr:"Piles → points de collecte en supermarchés.",de:"Batterien → Sammelboxen im Supermarkt.",lb:"Batterien → Sammelboischt am Supermarché."}},
+
+{id:"hearing_aid_battery",name:"Hearing aid battery",
+ desc:"A tiny silver zinc-air hearing aid button cell battery.",
+ hint:"Same rule as AA batteries — supermarket collection box. Never in regular bins.",
+ bin:"residual",level:2,age:"senior",special:"battery",
+ svg:function(){return mksvg('<circle cx="30" cy="36" r="16" fill="#c8c8b0"/><circle cx="30" cy="36" r="16" fill="none" stroke="#a0a088" stroke-width="1.5"/><circle cx="30" cy="36" r="10" fill="#d8d8c0"/><circle cx="30" cy="36" r="6" fill="#e0e0c8"/><text x="30" y="30" text-anchor="middle" font-size="6" fill="#808060" font-family="sans-serif">312</text><text x="30" y="40" text-anchor="middle" font-size="5" fill="#808060" font-family="sans-serif">ZINC AIR</text>',60,68);},
+ explain:{en:"Hearing aid batteries → supermarket battery collection box. Same rule as AA batteries.",fr:"Piles pour appareils auditifs → boîte de collecte en supermarché.",de:"Hörgerätebatterien → Sammelboxen im Supermarkt.",lb:"Hörgerätbatterien → Sammelboischt am Supermarché."}},
+
+{id:"medication_blister",name:"Medication blister pack",
+ desc:"A foil-backed plastic blister pack with several pills remaining.",
+ hint:"Pharmacies are legally required to take back your old medication — it's completely free.",
+ bin:"residual",level:2,age:"adult_senior",special:"medication",
+ svg:function(){return mksvg('<rect x="6" y="14" width="48" height="40" rx="5" fill="#c0d8f0"/><rect x="6" y="14" width="48" height="40" rx="5" fill="none" stroke="#80a8d0" stroke-width="1"/><ellipse cx="19" cy="26" rx="8" ry="8" fill="#e8d890"/><ellipse cx="30" cy="26" rx="8" ry="8" fill="#e8d890"/><ellipse cx="41" cy="26" rx="8" ry="8" fill="#d8c880" opacity=".5"/><ellipse cx="19" cy="42" rx="8" ry="8" fill="#e8d890"/><ellipse cx="30" cy="42" rx="8" ry="8" fill="#ccc" opacity=".4"/><ellipse cx="41" cy="42" rx="8" ry="8" fill="#e8d890"/><ellipse cx="19" cy="26" rx="6" ry="6" fill="#e8b830"/><ellipse cx="30" cy="26" rx="6" ry="6" fill="#e8b830"/><ellipse cx="19" cy="42" rx="6" ry="6" fill="#e8b830"/><ellipse cx="41" cy="42" rx="6" ry="6" fill="#e8b830"/>',60,68);},
+ explain:{en:"Medications → return to a pharmacy (Apotheke). Free and legally required.",fr:"Médicaments → rapporter en pharmacie. Gratuit et légalement obligatoire.",de:"Medikamente → Apotheke zurückbringen. Kostenlos und gesetzlich vorgeschrieben.",lb:"Medikamenter → an d'Apothéik zréckbréngen."}},
+
+{id:"motor_oil",name:"Used motor oil canister",
+ desc:"A partly empty yellow plastic canister labelled 'Motor Oil', visibly dirty.",
+ hint:"Hazardous waste — take to the Superdreckskëscht or Waste Centre. Never pour down the drain.",
+ bin:"residual",level:3,age:"adult_senior",special:"hazardous",
+ svg:function(){return mksvg('<rect x="11" y="16" width="38" height="48" rx="5" fill="#e09818"/><rect x="11" y="16" width="38" height="48" rx="5" fill="none" stroke="#b07010" stroke-width="1"/><rect x="15" y="8" width="30" height="10" rx="2" fill="#d08010"/><rect x="25" y="3" width="10" height="7" rx="3" fill="#b06000"/><rect x="13" y="22" width="34" height="34" rx="3" fill="#d09010" opacity=".5"/><text x="30" y="36" text-anchor="middle" font-size="7" fill="#7a4000" font-family="sans-serif" font-weight="700">MOTOR</text><text x="30" y="45" text-anchor="middle" font-size="7" fill="#7a4000" font-family="sans-serif" font-weight="700">OIL</text>',60,68);},
+ explain:{en:"Used motor oil → Superdreckskëscht or Waste Centre. Never pour down the drain!",fr:"Huile de moteur usagée → Superdreckskëscht. Jamais dans l'évier!",de:"Altöl → Superdreckskëscht. Niemals in den Abfluss!",lb:"Al Moteroil → Superdreckskëscht."}},
+
+{id:"paint_tin",name:"Paint tin (leftover paint)",
+ desc:"A half-empty tin of wall paint — the lid has dried paint crust on it.",
+ hint:"Leftover paint is hazardous waste — Superdreckskëscht or Waste Centre only.",
+ bin:"residual",level:3,age:"adult_senior",special:"hazardous",
+ svg:function(){return mksvg('<rect x="12" y="16" width="36" height="40" rx="4" fill="#e04040"/><rect x="12" y="16" width="36" height="40" rx="4" fill="none" stroke="#b02020" stroke-width="1"/><rect x="10" y="10" width="40" height="8" rx="3" fill="#c83030"/><rect x="14" y="18" width="32" height="30" rx="2" fill="#c83030" opacity=".4"/><path d="M14 24 Q22 20 30 24 Q38 28 46 24" stroke="#f06060" stroke-width="1.5" fill="none" opacity=".5"/><text x="30" y="38" text-anchor="middle" font-size="6.5" fill="#fff" font-family="sans-serif" font-weight="700">PAINT</text>',60,68);},
+ explain:{en:"Leftover paint is hazardous → Superdreckskëscht or Waste Centre. Never in regular bins.",fr:"Peinture restante → Superdreckskëscht. Jamais dans les poubelles normales.",de:"Restfarbe ist gefährlich → Superdreckskëscht oder Wertstoffhof.",lb:"Reschtpafengt → Superdreckskëscht."}},
+
+{id:"nail_polish",name:"Nail polish bottle",
+ desc:"A small glass bottle of nail polish with some colour remaining.",
+ hint:"Chemical waste — the solvents are flammable and toxic. Superdreckskëscht only.",
+ bin:"residual",level:3,age:"adult_senior",special:"hazardous",
+ svg:function(){return mksvg('<rect x="26" y="2" width="8" height="8" rx="2" fill="#c02060"/><rect x="28" y="10" width="4" height="6" rx="1" fill="#d83070"/><rect x="22" y="16" width="16" height="40" rx="6" fill="#e84080"/><rect x="22" y="16" width="16" height="40" rx="6" fill="none" stroke="#c02060" stroke-width="1"/><rect x="24" y="22" width="5" height="28" rx="2.5" fill="#fff" opacity=".2"/>',60,68);},
+ explain:{en:"Nail polish contains hazardous solvents → Superdreckskëscht. Never in glass or residual bins.",fr:"Vernis à ongles (solvants dangereux) → Superdreckskëscht.",de:"Nagellack (gefährliche Lösungsmittel) → Superdreckskëscht.",lb:"Nagellack → Superdreckskëscht."}},
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ELECTRONICS
+// ══════════════════════════════════════════════════════════════════════════════
+{id:"smartphone",name:"Old smartphone",
+ desc:"A cracked non-functional touchscreen smartphone.",
+ hint:"Contains lithium battery, rare earth metals — hazardous if landfilled.",
+ bin:"residual",level:2,age:"all",special:"ewaste",
+ svg:function(){return mksvg('<rect x="13" y="4" width="34" height="60" rx="7" fill="#282828"/><rect x="15" y="10" width="30" height="46" rx="3" fill="#1a3a58"/><rect x="13" y="4" width="34" height="60" rx="7" fill="none" stroke="#404040" stroke-width="1"/><rect x="22" y="5" width="16" height="3" rx="1.5" fill="#404040"/><circle cx="38" cy="6.5" rx="2" fill="#303030"/><rect x="17" y="14" width="9" height="7" rx="1.5" fill="#4a7ab0" opacity=".85"/><rect x="28" y="14" width="9" height="7" rx="1.5" fill="#7ab04a" opacity=".85"/><rect x="17" y="24" width="27" height="22" rx="2" fill="#2a5888" opacity=".6"/><rect x="21" y="54" width="18" height="4" rx="2" fill="#383838"/>',60,68);},
+ explain:{en:"Electronics → e-waste collection point or Recyclable Waste Centre.",fr:"Appareils électroniques → point de collecte e-déchets.",de:"Elektrogeräte → E-Müll-Sammelstelle.",lb:"Elektrogeräter → spezielle Sammelpunkt."}},
+
+{id:"earphones",name:"Earphones / earbuds",
+ desc:"A tangled pair of old wired earphones with a broken connector.",
+ hint:"Small electronics are e-waste — many supermarkets and electronics stores collect them for free.",
+ bin:"residual",level:2,age:"all",special:"ewaste",
+ svg:function(){return mksvg('<circle cx="20" cy="24" r="8" fill="#333"/><circle cx="20" cy="24" r="5" fill="#444"/><circle cx="40" cy="24" r="8" fill="#333"/><circle cx="40" cy="24" r="5" fill="#444"/><path d="M20 32 Q20 44 30 46 Q40 44 40 32" stroke="#555" stroke-width="2" fill="none"/><rect x="28" y="46" width="4" height="16" rx="2" fill="#444"/><rect x="26" y="60" width="8" height="4" rx="2" fill="#333"/>',60,68);},
+ explain:{en:"Earphones → e-waste collection point at supermarkets or Waste Centre.",fr:"Écouteurs → point de collecte e-déchets en supermarché.",de:"Kopfhörer → E-Müll-Sammelstelle im Supermarkt.",lb:"Kopfhörer → E-Müll-Sammelpunkt."}},
+
+{id:"usb_charger",name:"USB charger / phone cable",
+ desc:"An old phone charger plug and frayed USB cable.",
+ hint:"Cables and chargers are small e-waste — collected at supermarkets and electronics stores.",
+ bin:"residual",level:2,age:"all",special:"ewaste",
+ svg:function(){return mksvg('<rect x="20" y="4" width="20" height="24" rx="4" fill="#333"/><rect x="24" y="8" width="5" height="8" rx="1" fill="#555"/><rect x="31" y="8" width="5" height="8" rx="1" fill="#555"/><rect x="22" y="20" width="16" height="4" rx="1" fill="#444"/><rect x="28" y="28" width="4" height="20" rx="2" fill="#555"/><path d="M30 48 Q22 52 20 60" stroke="#555" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="16" y="58" width="8" height="6" rx="2" fill="#444"/>',60,68);},
+ explain:{en:"USB chargers and cables → e-waste collection at supermarkets or Waste Centre.",fr:"Chargeurs et câbles → collecte e-déchets en supermarché.",de:"USB-Ladegeräte und Kabel → E-Müll-Sammelstelle.",lb:"USB-Lueders a Käbelen → E-Müll-Sammelpunkt."}},
+
+{id:"led_bulb",name:"Broken LED bulb",
+ desc:"A burnt-out screw-base LED light bulb.",
+ hint:"LED bulbs contain electronics and sometimes small amounts of hazardous materials — not glass bin.",
+ bin:"residual",level:2,age:"all",special:"ewaste",
+ svg:function(){return mksvg('<path d="M18 30 Q16 14 30 10 Q44 14 42 30 Q40 42 30 48 Q20 42 18 30Z" fill="#f0f0c0"/><path d="M18 30 Q16 14 30 10 Q44 14 42 30 Q40 42 30 48 Q20 42 18 30Z" fill="none" stroke="#d0d080" stroke-width="1.5"/><rect x="22" y="48" width="16" height="6" rx="2" fill="#c8c8a0"/><rect x="24" y="54" width="12" height="4" rx="1" fill="#b0b090"/><rect x="26" y="58" width="8" height="6" rx="2" fill="#a0a080"/><rect x="24" y="30" width="4" height="14" rx="2" fill="#fff" opacity=".3"/><rect x="32" y="26" width="3" height="16" rx="1.5" fill="#fff" opacity=".2"/>',60,68);},
+ explain:{en:"LED bulbs → e-waste collection point. Never in glass bin.",fr:"Ampoules LED → collecte e-déchets. Jamais dans le conteneur à verre.",de:"LED-Lampen → E-Müll-Sammelstelle. Niemals in den Glascontainer.",lb:"LED-Lämpchen → E-Müll-Sammelpunkt."}},
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HYGIENE & PERSONAL CARE
+// ══════════════════════════════════════════════════════════════════════════════
+{id:"sanitary_pad",name:"Sanitary pad / napkin",
+ desc:"A used disposable absorbent menstrual pad in its wrapper.",
+ hint:"Mixed plastic backing, cotton, superabsorbent polymers — none of these layers can be separated.",
+ bin:"residual",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="7" y="20" width="46" height="28" rx="14" fill="#f0f0f0" stroke="#ddd" stroke-width="1"/><rect x="11" y="24" width="38" height="20" rx="10" fill="#fff" opacity=".8"/><line x1="18" y1="28" x2="42" y2="28" stroke="#e0e0e0" stroke-width="1.2"/><line x1="18" y1="32" x2="42" y2="32" stroke="#e0e0e0" stroke-width="1.2"/><line x1="18" y1="36" x2="42" y2="36" stroke="#e0e0e0" stroke-width="1.2"/><rect x="7" y="16" width="46" height="6" rx="3" fill="#e2eef8"/><rect x="7" y="46" width="46" height="6" rx="3" fill="#e2eef8"/><rect x="7" y="52" width="46" height="12" rx="4" fill="#d0e4f4"/>',60,68);},
+ explain:{en:"Sanitary pads are mixed materials — not recyclable or compostable → residual bin.",fr:"Protections hygiéniques (matériaux mixtes) → poubelle noire.",de:"Hygienebinden (Mischmaterialien) → Restmülltonne.",lb:"Hygiënebinden → Reschtmüll."}},
+
+{id:"tampon",name:"Tampon",
+ desc:"A single-use tampon with plastic applicator and cotton retrieval cord.",
+ hint:"Cotton + plastic applicator + synthetic fibres — never in organic bin.",
+ bin:"residual",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="25" y="4" width="10" height="32" rx="5" fill="#f0f0f0" stroke="#ddd" stroke-width="1"/><rect x="23" y="8" width="14" height="4" rx="2" fill="#e8e8e8"/><rect x="23" y="16" width="14" height="4" rx="2" fill="#e8e8e8"/><rect x="23" y="24" width="14" height="4" rx="2" fill="#e8e8e8"/><rect x="28" y="36" width="4" height="24" rx="2" fill="#d0d0d0"/><ellipse cx="30" cy="61" rx="5" ry="2.5" fill="#bbb"/><rect x="26" y="3" width="8" height="5" rx="4" fill="#fff" stroke="#ddd" stroke-width="1"/>',60,68);},
+ explain:{en:"Tampons → residual bin only. Never in organic or paper.",fr:"Tampons → poubelle noire uniquement.",de:"Tampons → nur Restmüll.",lb:"Tampons → nëmmen Reschtmüll."}},
+
+{id:"baby_diaper",name:"Baby diaper (nappy)",
+ desc:"A used disposable baby diaper, sealed for disposal.",
+ hint:"Explicitly banned from Luxembourg's organic/bio bin — too much synthetic material.",
+ bin:"residual",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="8" y="18" width="44" height="36" rx="8" fill="#f0f0f0" stroke="#ddd" stroke-width="1"/><rect x="12" y="22" width="36" height="28" rx="6" fill="#fff" opacity=".7"/><rect x="8" y="28" width="10" height="16" rx="5" fill="#e0e8f8"/><rect x="42" y="28" width="10" height="16" rx="5" fill="#e0e8f8"/><rect x="20" y="24" width="20" height="24" rx="4" fill="#ddeeff" opacity=".6"/><rect x="22" y="38" width="6" height="6" rx="3" fill="#aaccee" opacity=".5"/><rect x="32" y="38" width="6" height="6" rx="3" fill="#aaccee" opacity=".5"/>',60,68);},
+ explain:{en:"Baby diapers → residual bin. Explicitly banned from organic bin in Luxembourg.",fr:"Couches pour bébé → poubelle noire. Explicitement interdites dans la poubelle organique.",de:"Babywindeln → Restmüll. Explizit verboten in der Bio-Tonne.",lb:"Babbiwuddelen → Reschtmüll."}},
+
+{id:"incontinence_pad",name:"Incontinence pad",
+ desc:"A large disposable incontinence pad, sealed for disposal.",
+ hint:"Same as sanitary pads — mixed synthetic materials, residual bin only.",
+ bin:"residual",level:2,age:"senior",
+ svg:function(){return mksvg('<rect x="6" y="16" width="48" height="38" rx="12" fill="#e8e8f8" stroke="#ccc" stroke-width="1"/><rect x="10" y="20" width="40" height="30" rx="10" fill="#fff" opacity=".7"/><line x1="16" y1="26" x2="44" y2="26" stroke="#d8d8e8" stroke-width="1.5"/><line x1="16" y1="32" x2="44" y2="32" stroke="#d8d8e8" stroke-width="1.5"/><line x1="16" y1="38" x2="44" y2="38" stroke="#d8d8e8" stroke-width="1.5"/><rect x="6" y="12" width="48" height="6" rx="3" fill="#d8d8f0"/><rect x="6" y="48" width="48" height="6" rx="3" fill="#d8d8f0"/>',60,68);},
+ explain:{en:"Incontinence pads → residual bin. Same rule as sanitary pads — mixed synthetic materials.",fr:"Protections pour incontinence → poubelle noire.",de:"Inkontinenzeinlagen → Restmüll.",lb:"Inkontinenzpads → Reschtmüll."}},
+
+{id:"condom",name:"Condom (used)",
+ desc:"A used condom in its foil wrapper, ready for disposal.",
+ hint:"Latex rubber + synthetic lubricants — not organic, not recyclable. Never flush.",
+ bin:"residual",level:2,age:"adult",
+ svg:function(){return mksvg('<rect x="20" y="10" width="20" height="30" rx="8" fill="#f0e8c0"/><rect x="20" y="10" width="20" height="30" rx="8" fill="none" stroke="#d8c898" stroke-width="1"/><rect x="22" y="40" width="16" height="3" rx="1.5" fill="#d8c898"/><rect x="18" y="44" width="24" height="16" rx="4" fill="#e0d8a8"/><rect x="18" y="44" width="24" height="16" rx="4" fill="none" stroke="#c8b888" stroke-width="1"/><text x="30" y="54" text-anchor="middle" font-size="5" fill="#a09060" font-family="sans-serif">CONDOM</text>',60,68);},
+ explain:{en:"Condoms are latex rubber → residual bin. Never flush down the toilet — they block sewers.",fr:"Préservatifs (caoutchouc latex) → poubelle noire. Ne jamais jeter dans les toilettes.",de:"Kondome (Latex) → Restmüll. Niemals in die Toilette.",lb:"Kondom → Reschtmüll."}},
+
+{id:"cotton_pads",name:"Cotton pads (used)",
+ desc:"Several used round cotton pads with makeup or cream residue.",
+ hint:"Contaminated with product — the residue means they go in residual, not organic.",
+ bin:"residual",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<circle cx="22" cy="30" r="12" fill="#f5f0e8"/><circle cx="22" cy="30" r="12" fill="none" stroke="#e0d8c8" stroke-width="1"/><ellipse cx="22" cy="28" rx="8" ry="4" fill="#e0b090" opacity=".4"/><circle cx="38" cy="38" r="11" fill="#f5f0e8"/><circle cx="38" cy="38" r="11" fill="none" stroke="#e0d8c8" stroke-width="1"/><ellipse cx="40" cy="36" rx="7" ry="3" fill="#c080a0" opacity=".3"/>',60,68);},
+ explain:{en:"Used cotton pads with makeup/cream residue → residual bin. Contamination overrides material.",fr:"Cotons démaquillants usagés → poubelle noire.",de:"Benutzte Wattepads (mit Make-up) → Restmüll.",lb:"Gebrauchte Wattepadde → Reschtmüll."}},
+
+{id:"plaster",name:"Adhesive bandage / plaster",
+ desc:"A used self-adhesive wound plaster with gauze centre.",
+ hint:"Mixed plastic film, gauze, adhesive — none separable.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<rect x="10" y="26" width="40" height="18" rx="4" fill="#f0d8b0"/><rect x="10" y="26" width="40" height="18" rx="4" fill="none" stroke="#d8b888" stroke-width="1"/><rect x="22" y="26" width="16" height="18" fill="#f8f0e0"/><rect x="24" y="28" width="12" height="14" rx="2" fill="#f0e8d8"/><line x1="24" y1="30" x2="36" y2="30" stroke="#d8c8b0" stroke-width="1" opacity=".6"/><line x1="24" y1="33" x2="36" y2="33" stroke="#d8c8b0" stroke-width="1" opacity=".6"/><line x1="24" y1="36" x2="36" y2="36" stroke="#d8c8b0" stroke-width="1" opacity=".6"/><line x1="24" y1="39" x2="36" y2="39" stroke="#d8c8b0" stroke-width="1" opacity=".6"/>',60,68);},
+ explain:{en:"Adhesive bandages/plasters are mixed (plastic, gauze, adhesive) → residual bin.",fr:"Pansements adhésifs (plastique, gaze, colle) → poubelle noire.",de:"Pflaster (Kunststoff, Gaze, Kleber) → Restmüll.",lb:"Plooschter → Reschtmüll."}},
+
+{id:"pill_organiser",name:"Pill organiser (plastic box)",
+ desc:"A weekly pill organiser box with multiple compartments — old and broken.",
+ hint:"Hard rigid plastic composite — not accepted in PMC (PMC is for packaging, not solid objects).",
+ bin:"residual",level:2,age:"senior",
+ svg:function(){return mksvg('<rect x="6" y="18" width="48" height="36" rx="4" fill="#4080c0"/><rect x="6" y="18" width="48" height="36" rx="4" fill="none" stroke="#2060a0" stroke-width="1"/><rect x="8" y="20" width="12" height="14" rx="2" fill="#60a0e0"/><rect x="22" y="20" width="12" height="14" rx="2" fill="#60a0e0"/><rect x="36" y="20" width="16" height="14" rx="2" fill="#60a0e0"/><rect x="8" y="36" width="12" height="14" rx="2" fill="#60a0e0"/><rect x="22" y="36" width="12" height="14" rx="2" fill="#60a0e0"/><rect x="36" y="36" width="16" height="14" rx="2" fill="#60a0e0"/><text x="14" y="29" text-anchor="middle" font-size="5" fill="#fff" font-family="sans-serif">MON</text><text x="28" y="29" text-anchor="middle" font-size="5" fill="#fff" font-family="sans-serif">TUE</text><text x="44" y="29" text-anchor="middle" font-size="5" fill="#fff" font-family="sans-serif">WED</text>',60,68);},
+ explain:{en:"Plastic pill organisers are hard composite objects → residual bin. PMC is for packaging only.",fr:"Piluliers en plastique → poubelle noire. Le PMC est pour les emballages uniquement.",de:"Kunststoff-Pillendosen → Restmüll. PMC ist nur für Verpackungen.",lb:"Plastikpillenbox → Reschtmüll."}},
+
+// ══════════════════════════════════════════════════════════════════════════════
+// TEXTILES & MISC
+// ══════════════════════════════════════════════════════════════════════════════
+{id:"tshirt_wearable",name:"Old T-shirt (still wearable)",
+ desc:"A faded but intact cotton T-shirt, still in one piece.",
+ hint:"If it's still wearable, it can go in a clothing donation bank — not the bin.",
+ bin:"residual",level:2,age:"all",special:"textile",
+ svg:function(){return mksvg('<path d="M16 14 L8 26 L18 30 L18 58 L42 58 L42 30 L52 26 L44 14 L36 20 Q30 24 24 20Z" fill="#4080c0"/><path d="M16 14 L8 26 L18 30 L18 58 L42 58 L42 30 L52 26 L44 14 L36 20 Q30 24 24 20Z" fill="none" stroke="#2060a0" stroke-width="1"/><rect x="20" y="32" width="4" height="20" rx="2" fill="#5090d0" opacity=".3"/><rect x="36" y="32" width="4" height="20" rx="2" fill="#5090d0" opacity=".3"/>',60,68);},
+ explain:{en:"Wearable old clothes → clothing donation bank (Kleidercontainer). If damaged → residual bin or Waste Centre.",fr:"Vêtements portables → conteneur textile. Si endommagés → poubelle noire.",de:"Tragbare Kleidung → Kleidercontainer. Kaputt → Restmüll.",lb:"Dragebare Kleeder → Kleedercontainer."}},
+
+{id:"sneakers_worn",name:"Worn-out sneakers",
+ desc:"A pair of heavily worn sneakers with damaged soles — beyond repair.",
+ hint:"Wearable shoes go to a clothing/shoe bank. Damaged beyond repair → Waste Centre.",
+ bin:"residual",level:2,age:"all",special:"textile",
+ svg:function(){return mksvg('<path d="M6 44 Q6 56 20 58 L50 58 Q56 56 56 50 L54 44 L46 38 L30 36 L18 38Z" fill="#c08060"/><path d="M18 38 L20 28 Q22 22 30 20 L38 20 Q44 22 46 38Z" fill="#d09070"/><path d="M6 50 L56 50" stroke="#a06040" stroke-width="1.5" fill="none"/><rect x="22" y="30" width="3" height="8" rx="1.5" fill="#e0a080" opacity=".5"/><rect x="28" y="28" width="3" height="10" rx="1.5" fill="#e0a080" opacity=".5"/><rect x="34" y="28" width="3" height="10" rx="1.5" fill="#e0a080" opacity=".5"/>',60,68);},
+ explain:{en:"Wearable shoes → shoe/clothing bank. Damaged → residual bin or Waste Centre.",fr:"Chaussures portables → conteneur textile. Endommagées → poubelle noire.",de:"Tragbare Schuhe → Kleidercontainer. Kaputt → Restmüll.",lb:"Dragebare Schong → Kleedercontainer."}},
+
+{id:"plastic_hanger",name:"Plastic clothes hanger",
+ desc:"A standard hard plastic coat hanger from a shop or wardrobe.",
+ hint:"Hard rigid plastic — not accepted in PMC, which is only for packaging materials.",
+ bin:"residual",level:2,age:"all",
+ svg:function(){return mksvg('<path d="M30 12 Q42 18 52 28 L48 32 Q40 24 30 20 Q20 24 12 32 L8 28 Q18 18 30 12Z" fill="#4080c0"/><path d="M30 12 Q42 18 52 28 L48 32 Q40 24 30 20 Q20 24 12 32 L8 28 Q18 18 30 12Z" fill="none" stroke="#2060a0" stroke-width="1"/><rect x="28" y="4" width="4" height="10" rx="2" fill="#5090d0"/><path d="M28 8 Q28 4 30 4 Q32 4 32 8" stroke="#2060a0" stroke-width="1.5" fill="none"/>',60,68);},
+ explain:{en:"Plastic clothes hangers → residual bin. PMC is for packaging only, not solid objects.",fr:"Cintres en plastique → poubelle noire. Le PMC est pour les emballages uniquement.",de:"Kunststoffkleiderbügel → Restmüll. PMC ist nur für Verpackungen.",lb:"Kleederbügel → Reschtmüll."}},
+
+{id:"cat_litter",name:"Cat litter bag (used)",
+ desc:"A sealed bag of used clay-based cat litter.",
+ hint:"Explicitly prohibited from the bio/organic bin in Luxembourg.",
+ bin:"residual",level:2,age:"adult_senior",
+ svg:function(){return mksvg('<rect x="7" y="26" width="46" height="38" rx="5" fill="#d4c090"/><rect x="7" y="26" width="46" height="9" rx="5" fill="#b8a070"/><ellipse cx="30" cy="26" rx="23" ry="7" fill="#c8b080"/><rect x="24" y="12" width="12" height="16" rx="3" fill="#c0a870"/><ellipse cx="30" cy="12" rx="9" ry="4" fill="#b09060"/><rect x="11" y="37" width="38" height="20" rx="3" fill="#c0a870" opacity=".4"/><text x="30" y="48" text-anchor="middle" font-size="6.5" fill="#7a6030" font-family="sans-serif" font-weight="700">CAT LITTER</text>',60,68);},
+ explain:{en:"Cat litter → residual bin. Explicitly forbidden from the organic/bio bin in Luxembourg.",fr:"Litière pour chat → poubelle noire. Interdite dans la poubelle organique.",de:"Katzenstreu → Restmüll. Verboten in der Bio-Tonne.",lb:"Katzestréi → Reschtmüll, NET Bio-Tonne."}},
+
+];
+
+// ── extra paper & glass items to balance bins ──────────────────────────────
+
+POOL.push(
+
+{id:"paper_bag",name:"Paper shopping bag",
+ desc:"A plain paper bag with twisted paper handles from a bakery or shop.",
+ hint:"Remove any plastic stickers or tape handles first, then paper bag.",
+ bin:"paper",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="12" y="20" width="36" height="42" rx="3" fill="#e8d8a8"/><rect x="12" y="20" width="36" height="42" rx="3" fill="none" stroke="#c8b878" stroke-width="1"/><path d="M18 20 Q18 12 24 10" stroke="#b89858" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M42 20 Q42 12 36 10" stroke="#b89858" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="14" y="24" width="32" height="2" fill="#c8b070" opacity=".4"/><rect x="16" y="30" width="28" height="24" rx="1" fill="#d8c888" opacity=".3"/>',60,68);},
+ explain:{en:"Plain paper bags → paper bag. Remove any plastic handles or tape first.",fr:"Sacs en papier → sac papier. Enlevez les poignées plastiques d'abord.",de:"Papiertüten → Papiersack. Plastikgriffe vorher entfernen.",lb:"Pabeier-Tuten → Pabeier-Sak."}},
+
+{id:"birthday_card_plain",name:"Plain birthday card",
+ desc:"A simple paper greeting card with no glitter, foil, or plastic coating.",
+ hint:"Plain paper and card go in the paper stream. Only glitter or foil versions go in residual.",
+ bin:"paper",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="12" y="10" width="36" height="48" rx="3" fill="#e0f0e8"/><rect x="12" y="10" width="36" height="48" rx="3" fill="none" stroke="#a0c8a8" stroke-width="1"/><text x="30" y="32" text-anchor="middle" font-size="10">🎂</text><text x="30" y="44" text-anchor="middle" font-size="7" fill="#508060" font-family="sans-serif">Happy</text><text x="30" y="53" text-anchor="middle" font-size="7" fill="#508060" font-family="sans-serif">Birthday!</text>',60,68);},
+ explain:{en:"Plain paper cards (no glitter/foil) → paper bag.",fr:"Cartes en papier simple (sans paillettes) → sac papier.",de:"Einfache Papierkarten (kein Glitzer) → Papiersack.",lb:"Einfach Pabeierkaart → Pabeier-Sak."}},
+
+{id:"cardboard_moving_box",name:"Large cardboard moving box",
+ desc:"A big double-walled corrugated box used for moving house, now flattened.",
+ hint:"Same as any cardboard — flatten it and put in the paper collection.",
+ bin:"paper",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="4" y="28" width="52" height="34" rx="2" fill="#c8a060"/><rect x="4" y="28" width="52" height="34" rx="2" fill="none" stroke="#a07838" stroke-width="1"/><polygon points="4,28 30,14 56,28" fill="#b08848"/><line x1="30" y1="14" x2="30" y2="28" stroke="#907030" stroke-width="1"/><rect x="4" y="28" width="52" height="5" fill="#d0b060" opacity=".5"/><rect x="10" y="34" width="40" height="22" rx="1" fill="#b09050" opacity=".3"/>',60,68);},
+ explain:{en:"Large cardboard boxes → paper collection. Must be flattened first.",fr:"Grandes boîtes carton → collecte papier. Aplatissez d'abord.",de:"Große Kartons → Papiersammlung. Vorher flachdrücken.",lb:"Grouss Kartonkëschten → Pabeier-Sammlung."}},
+
+{id:"beer_bottle",name:"Beer bottle (glass)",
+ desc:"An empty brown glass beer bottle, rinsed.",
+ hint:"Standard glass bottle — Glascontainer. Any colour glass is accepted.",
+ bin:"glass",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="26" y="2" width="8" height="6" rx="2" fill="#666"/><rect x="24" y="8" width="12" height="8" rx="3" fill="#8B6020"/><rect x="22" y="16" width="16" height="6" rx="2" fill="#9B7030"/><rect x="14" y="22" width="32" height="42" rx="10" fill="#a07828"/><rect x="14" y="56" width="32" height="8" rx="8" fill="#8B6020"/><rect x="16" y="30" width="6" height="26" rx="3" fill="#fff" opacity=".1"/><rect x="20" y="32" width="20" height="16" rx="3" fill="#fff" opacity=".08"/>',60,68);},
+ explain:{en:"Beer/glass bottles → Glascontainer. Any colour glass is accepted.",fr:"Bouteilles en verre → conteneur à verre. Toutes les couleurs acceptées.",de:"Bier-/Glasflaschen → Glascontainer. Alle Glasfarben werden akzeptiert.",lb:"Béierflaschen → Glascontainer."}},
+
+{id:"jam_jar",name:"Jam jar (glass)",
+ desc:"An empty glass jam or honey jar with a metal lid.",
+ hint:"Glass body → Glascontainer. Remove the metal lid first — metal lid → PMC.",
+ bin:"glass",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="18" y="4" width="24" height="7" rx="3" fill="#777"/><rect x="16" y="11" width="28" height="5" rx="2" fill="#999"/><rect x="12" y="16" width="36" height="44" rx="8" fill="#f8d860" opacity=".85"/><rect x="12" y="16" width="36" height="44" rx="8" fill="none" stroke="#d8a820" stroke-width="1.5"/><rect x="14" y="22" width="7" height="28" rx="3.5" fill="#fff" opacity=".28"/><rect x="18" y="28" width="24" height="18" rx="3" fill="#fff" opacity=".12"/>',60,68);},
+ explain:{en:"Glass jars → Glascontainer. Remove metal lid first (lid → PMC yellow bag).",fr:"Pots en verre → conteneur à verre. Enlevez le couvercle métallique (→ sac PMC).",de:"Glasgläser → Glascontainer. Metalldeckel entfernen (→ PMC-Sack).",lb:"Glasdotten → Glascontainer. Metalldeckel ewechhuelen (→ PMC-Sak)."}},
+
+{id:"juice_carton",name:"Juice carton (Tetra Pak)",
+ desc:"A 1-litre orange juice Tetra Pak carton, empty and rinsed.",
+ hint:"Same as milk carton — beverage cartons go in the PMC yellow bag.",
+ bin:"plastic",level:1,age:"all",
+ svg:function(){return mksvg('<rect x="10" y="22" width="40" height="42" rx="2" fill="#f8f0e8" stroke="#e0c898" stroke-width="1"/><polygon points="10,22 30,8 50,22" fill="#f0e0c0" stroke="#e0c898" stroke-width="1"/><line x1="30" y1="8" x2="30" y2="22" stroke="#d8b878" stroke-width="1"/><rect x="10" y="22" width="40" height="5" fill="#f0a820"/><rect x="10" y="42" width="40" height="16" rx="1" fill="#f0a820"/><text x="30" y="52" text-anchor="middle" font-size="7" fill="#804000" font-family="sans-serif" font-weight="700">JUICE</text><text x="30" y="60" text-anchor="middle" font-size="6" fill="#804000" font-family="sans-serif">1L</text>',60,68);},
+ explain:{en:"Juice/beverage cartons (Tetra Pak) → PMC yellow bag. Rinse first.",fr:"Briques de jus → sac PMC jaune.",de:"Saftkartons → gelber PMC-Sack.",lb:"Juuskartong → giele PMC-Sak."}},
+
+{id:"plastic_bottle_cap",name:"Plastic bottle cap (alone)",
+ desc:"A single plastic screw cap separated from a bottle.",
+ hint:"Caps can go in the PMC bag alone, or just leave them on the bottle — both fine since 2024.",
+ bin:"plastic",level:2,age:"all",
+ svg:function(){return mksvg('<circle cx="30" cy="36" r="18" fill="#e03020"/><circle cx="30" cy="36" r="18" fill="none" stroke="#b01010" stroke-width="2"/><circle cx="30" cy="36" r="12" fill="#c82010"/><rect x="22" y="28" width="16" height="3" rx="1.5" fill="#a00808" opacity=".5"/><rect x="22" y="33" width="16" height="3" rx="1.5" fill="#a00808" opacity=".5"/><rect x="22" y="38" width="16" height="3" rx="1.5" fill="#a00808" opacity=".5"/>',60,68);},
+ explain:{en:"Plastic bottle caps → PMC bag. You can also leave them on the bottle since 2024.",fr:"Bouchons plastiques → sac PMC. Vous pouvez aussi les laisser sur la bouteille depuis 2024.",de:"Plastikdeckel → PMC-Sack. Seit 2024 können sie auch auf der Flasche bleiben.",lb:"Plastikdeckele → PMC-Sak."}},
+
+{id:"thermometer_mercury",name:"Mercury thermometer",
+ desc:"An old-style glass thermometer containing mercury — broken or expired.",
+ hint:"Contains highly toxic mercury — Superdreckskëscht only. Never break it or put in any bin.",
+ bin:"residual",level:3,age:"senior",special:"hazardous",
+ svg:function(){return mksvg('<rect x="28" y="4" width="4" height="50" rx="2" fill="#e8f0f8"/><rect x="28" y="4" width="4" height="50" rx="2" fill="none" stroke="#a0b8c8" stroke-width="1"/><rect x="29" y="24" width="2" height="30" rx="1" fill="#e83030" opacity=".8"/><ellipse cx="30" cy="58" rx="6" ry="6" fill="#e83030"/><ellipse cx="30" cy="58" rx="4" ry="4" fill="#ff5050" opacity=".6"/><line x1="32" y1="18" x2="36" y2="18" stroke="#a0b8c8" stroke-width="1"/><line x1="32" y1="28" x2="36" y2="28" stroke="#a0b8c8" stroke-width="1"/><line x1="32" y1="38" x2="36" y2="38" stroke="#a0b8c8" stroke-width="1"/>',60,68);},
+ explain:{en:"Mercury thermometers are extremely hazardous → Superdreckskëscht only. Never break or put in any bin.",fr:"Thermomètres au mercure → Superdreckskëscht uniquement. Extrêmement dangereux.",de:"Quecksilberthermometer → nur Superdreckskëscht. Extrem gefährlich.",lb:"Quecksilberthermometer → nëmme Superdreckskëscht."}},
+
+{id:"smoke_detector",name:"Old smoke detector",
+ desc:"A battery-operated ceiling smoke alarm that is no longer working.",
+ hint:"Contains Americium-241 (a low-level radioactive source) — Superdreckskëscht only.",
+ bin:"residual",level:3,age:"adult_senior",special:"hazardous",
+ svg:function(){return mksvg('<circle cx="30" cy="38" r="22" fill="#d0d0c8"/><circle cx="30" cy="38" r="22" fill="none" stroke="#a0a098" stroke-width="1.5"/><circle cx="30" cy="38" r="14" fill="#c0c0b8"/><circle cx="30" cy="38" r="8" fill="#b0b0a8"/><ellipse cx="30" cy="20" rx="6" ry="3" fill="#b0b0a8"/><rect x="26" y="14" width="8" height="8" rx="2" fill="#c8c8c0"/><text x="30" y="56" text-anchor="middle" font-size="5.5" fill="#606058" font-family="sans-serif">SMOKE</text>',60,68);},
+ explain:{en:"Smoke detectors contain Americium-241 → Superdreckskëscht only. Handle carefully.",fr:"Détecteurs de fumée (contiennent de l'Américium-241) → Superdreckskëscht uniquement.",de:"Rauchmelder (enthalten Americium-241) → nur Superdreckskëscht.",lb:"Rauchmeldere → nëmme Superdreckskëscht."}}
+
+);
+
+</script>
+<script>
+// ── Constants ────────────────────────────────────────────────────────────────
 var LVDESCS={
-  beginner:"All 5 bins, straightforward everyday items only. Great for newcomers and children.",
-  advanced:"All 5 bins with tricky edge cases: sanitary products, ceramics, cat litter, foil bags.",
-  expert:"All 5 bins, every item, plus a countdown timer (8 sec) per question. For sorting masters!"
-};
-var LVBINS={
-  beginner:["glass","plastic","paper","organic","residual"],
-  advanced:["glass","plastic","paper","organic","residual"],
-  expert:["glass","plastic","paper","organic","residual"]
+  beginner:"All 5 bins shown. Straightforward everyday items — great for beginners and children.",
+  advanced:"All 5 bins. Adds tricky edge cases: composite packaging, contamination rules, special disposal.",
+  expert:"All 5 bins + countdown timer (8 sec per item). For true Luxembourg sorting masters!"
 };
 var BLAB={
   glass:{en:"Glass",fr:"Verre",de:"Glas",lb:"Glas"},
@@ -247,244 +1043,94 @@ var BLAB={
   organic:{en:"Organic",fr:"Bio",de:"Bio",lb:"Bio"},
   residual:{en:"Residual",fr:"Ordures",de:"Restmüll",lb:"Reschtmüll"}
 };
+var BIN_COLORS={glass:"#4A90D9",plastic:"#D4A017",paper:"#3A7BC8",organic:"#4A7C2F",residual:"#555"};
 var EXTRAS={
-  battery:{en:"⚠️ Take to a supermarket battery collection box!",fr:"⚠️ Déposer au supermarché!",de:"⚠️ In Supermarkt-Sammelbox!",lb:"⚠️ Am Supermarché ofginn!"},
-  medication:{en:"⚠️ Return to a pharmacy (Apotheke)!",fr:"⚠️ Rapporter en pharmacie!",de:"⚠️ Apotheke zurückbringen!",lb:"⚠️ An d'Apothéik!"},
-  bulky:{en:"⚠️ Take to Superdreckskëscht / Waste Centre!",fr:"⚠️ Au Superdreckskëscht!",de:"⚠️ Zum Superdreckskëscht!",lb:"⚠️ Op de Superdreckskëscht!"}
+  battery:{en:"⚠️ Supermarket battery collection box!",fr:"⚠️ Boîte de collecte en supermarché!",de:"⚠️ Sammelbox im Supermarkt!",lb:"⚠️ Sammelboischt am Supermarché!"},
+  medication:{en:"⚠️ Return to a pharmacy (Apotheke) — free!",fr:"⚠️ Rapporter en pharmacie — gratuit!",de:"⚠️ Apotheke zurückbringen — kostenlos!",lb:"⚠️ An d'Apothéik — gratis!"},
+  hazardous:{en:"⚠️ Superdreckskëscht / Waste Centre only!",fr:"⚠️ Superdreckskëscht uniquement!",de:"⚠️ Nur Superdreckskëscht!",lb:"⚠️ Nëmme Superdreckskëscht!"},
+  ewaste:{en:"⚠️ E-waste collection point or Waste Centre.",fr:"⚠️ Point de collecte e-déchets.",de:"⚠️ E-Müll-Sammelstelle.",lb:"⚠️ E-Müll-Sammelpunkt."},
+  bulky:{en:"⚠️ Take to a Waste Centre (Superdreckskëscht).",fr:"⚠️ Au Superdreckskëscht.",de:"⚠️ Zum Superdreckskëscht.",lb:"⚠️ Op de Superdreckskëscht."},
+  textile:{en:"⚠️ Clothing bank if wearable (Kleidercontainer).",fr:"⚠️ Conteneur textile si portable.",de:"⚠️ Kleidercontainer wenn tragbar.",lb:"⚠️ Kleedercontainer wann dragebaar."}
+};
+var FINE_MSGS={
+  en:"💸 Wrong sorting in real life: €25–€250 fine, or a red penalty label on your PMC bag.",
+  fr:"💸 Mauvais tri en vrai: amende de 25–250€ ou étiquette rouge sur votre sac PMC.",
+  de:"💸 Falsches Sortieren in echt: €25–€250 Bußgeld oder rotes Strafaufkleber auf Ihrem PMC-Sack.",
+  lb:"💸 Falsch sortéieren am richtegen Liewen: €25–€250 Busgeld oder roten Strafaufkleber."
 };
 var WSLBL={en:"Items to review",fr:"Points à réviser",de:"Zum Wiederholen",lb:"Nees kucken"};
 var TIMEDLBL={en:"⏱ Time ran out",fr:"⏱ Temps écoulé",de:"⏱ Zeit abgelaufen",lb:"⏱ Zäit eriwwer"};
-var YOURANS={en:"You chose:",fr:"Vous avez choisi:",de:"Ihre Wahl:",lb:"Är Äntwert:"};
-var CORRECTANS={en:"Correct bin:",fr:"Correct:",de:"Richtig:",lb:"Richteg:"};
+var YOURANS={en:"You chose:",fr:"Vous:",de:"Sie:",lb:"Dir:"};
+var CORRECTANS={en:"Correct:",fr:"Correct:",de:"Richtig:",lb:"Richteg:"};
+var BASE_PTS=10;
 
-function mksvg(inner,w,h){return'<svg width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';}
+// ── State ────────────────────────────────────────────────────────────────────
+var lang="en",ageGroup=null,difficulty=null,qty=null;
+var score=0,lives=3,current=0,results=[],answering=true,streak=0,hintUsed=false;
+var queue=[],usedIds=[],timerInt=null,timeLeft=0,wrongLog=[];
+var unknownQueries=[];
 
-var POOL=[
-  {id:"cola",name:"Cola plastic bottle",
-   desc:"A 500 ml transparent red-labelled PET bottle.",
-   hint:"Rinse it out and squash flat before putting in.",
-   bin:"plastic",level:1,
-   svg:function(){return mksvg('<rect x="22" y="2" width="16" height="5" rx="2.5" fill="#cc2200"/><rect x="18" y="7" width="24" height="5" rx="2" fill="#bb3300"/><rect x="13" y="12" width="34" height="50" rx="12" fill="#dd4422"/><rect x="13" y="12" width="34" height="14" rx="10" fill="#cc3311"/><rect x="13" y="52" width="34" height="10" rx="8" fill="#cc3311"/><rect x="15" y="22" width="5" height="28" rx="2.5" fill="#fff" opacity=".15"/><rect x="18" y="28" width="24" height="12" rx="3" fill="#fff" opacity=".12"/><text x="30" y="37" text-anchor="middle" font-size="7" fill="#fff" font-family="sans-serif" font-weight="700">COLA</text>',60,68);},
-   explain:{en:"Plastic bottles → PMC (yellow) bag. Caps can stay on since 2024.",fr:"Bouteilles plastique → sac PMC.",de:"Plastikflaschen → gelber PMC-Sack.",lb:"Plastikfläschen → giele PMC-Sak."}},
-  {id:"wine",name:"Wine bottle (glass)",
-   desc:"An empty dark-green glass bottle, 75 cl.",
-   hint:"Remove the cork before dropping it in the glass bank.",
-   bin:"glass",level:1,
-   svg:function(){return mksvg('<rect x="26" y="2" width="8" height="7" rx="3" fill="#8B5A2B"/><rect x="23" y="9" width="14" height="8" rx="3" fill="#2d5a27"/><rect x="18" y="17" width="24" height="7" rx="2" fill="#2d5a27"/><rect x="12" y="24" width="36" height="40" rx="11" fill="#3a7030"/><rect x="12" y="56" width="36" height="8" rx="8" fill="#2d5a27"/><rect x="14" y="32" width="6" height="22" rx="3" fill="#fff" opacity=".13"/><rect x="18" y="36" width="24" height="14" rx="3" fill="#fff" opacity=".1"/><text x="30" y="45" text-anchor="middle" font-size="6" fill="#c8f0b8" font-family="sans-serif">WINE</text>',60,68);},
-   explain:{en:"Glass bottles → Glascontainer. Remove the cork first.",fr:"Bouteilles en verre → conteneur à verre.",de:"Glasflaschen → Glascontainer. Korken entfernen.",lb:"Glasfläschen → Glascontainer."}},
-  {id:"newspaper",name:"Newspaper",
-   desc:"A folded daily broadsheet with black ink printing.",
-   hint:"It must be dry — wet or soiled paper goes in residual.",
-   bin:"paper",level:1,
-   svg:function(){return mksvg('<rect x="5" y="6" width="50" height="58" rx="2" fill="#f4f0e2"/><rect x="5" y="6" width="50" height="11" rx="2" fill="#1a1a1a"/><text x="30" y="15" text-anchor="middle" font-size="6" fill="#fff" font-family="sans-serif" font-weight="700">DAILY NEWS</text><rect x="9" y="21" width="42" height="2" rx="1" fill="#999"/><rect x="9" y="27" width="19" height="18" rx="1" fill="#ddd"/><rect x="30" y="27" width="20" height="3" rx="1" fill="#bbb"/><rect x="30" y="32" width="18" height="2" rx="1" fill="#ccc"/><rect x="30" y="36" width="20" height="2" rx="1" fill="#ccc"/><rect x="9" y="50" width="42" height="2" rx="1" fill="#ccc"/><rect x="9" y="55" width="36" height="2" rx="1" fill="#ddd"/>',60,68);},
-   explain:{en:"Newspapers → blue paper/press bag or container.",fr:"Journaux → sac papier/presse bleu.",de:"Zeitungen → blauer Papier-/Pressesack.",lb:"Zeitungen → blo Pabeier-Sak."}},
-  {id:"can",name:"Aluminium drink can",
-   desc:"A 33 cl steel/aluminium soda or beer can.",
-   hint:"Metal goes in the PMC yellow bag, not the residual bin.",
-   bin:"plastic",level:1,
-   svg:function(){return mksvg('<rect x="13" y="10" width="34" height="50" rx="9" fill="#c8c8c8"/><rect x="13" y="10" width="34" height="9" rx="9" fill="#a8a8a8"/><rect x="13" y="51" width="34" height="9" rx="9" fill="#a8a8a8"/><rect x="17" y="5" width="26" height="7" rx="4" fill="#b0b0b0"/><rect x="20" y="3" width="7" height="5" rx="2" fill="#888"/><rect x="16" y="4" width="11" height="3" rx="1.5" fill="#666"/><rect x="15" y="21" width="5" height="22" rx="2.5" fill="#fff" opacity=".2"/><rect x="17" y="25" width="26" height="14" rx="3" fill="#fff" opacity=".1"/><text x="30" y="34" text-anchor="middle" font-size="7" fill="#444" font-family="sans-serif" font-weight="700">SODA</text>',60,68);},
-   explain:{en:"Metal cans → PMC yellow bag. Plastic, metal & cartons all together!",fr:"Canettes → sac PMC jaune.",de:"Metallkannen → gelber PMC-Sack.",lb:"Metalldosen → giele PMC-Sak."}},
-  {id:"milk_carton",name:"Milk carton (Tetra Pak)",
-   desc:"A 1-litre rectangular gable-top carton for milk.",
-   hint:"Rinse and flatten it — the carton (not the cap) goes in PMC.",
-   bin:"plastic",level:1,
-   svg:function(){return mksvg('<rect x="10" y="22" width="40" height="42" rx="2" fill="#f8f8f8" stroke="#ddd" stroke-width="1"/><polygon points="10,22 30,8 50,22" fill="#ececec" stroke="#ddd" stroke-width="1"/><line x1="30" y1="8" x2="30" y2="22" stroke="#ccc" stroke-width="1"/><rect x="10" y="22" width="40" height="5" fill="#dbeef8"/><rect x="10" y="42" width="40" height="16" rx="1" fill="#dbeef8"/><text x="30" y="52" text-anchor="middle" font-size="8" fill="#1a6a9a" font-family="sans-serif" font-weight="700">MILK</text><text x="30" y="60" text-anchor="middle" font-size="6" fill="#3a8aba" font-family="sans-serif">1L</text>',60,68);},
-   explain:{en:"Beverage cartons (Tetra Pak) → PMC yellow bag. Rinse first!",fr:"Briques alimentaires → sac PMC jaune.",de:"Getränkekartons → gelber PMC-Sack. Vorher ausspülen!",lb:"Getränkskartons → giele PMC-Sak."}},
-  {id:"cardboard",name:"Clean cardboard box",
-   desc:"A flat brown corrugated cardboard box, no food residue.",
-   hint:"Flatten it to save space in the paper bag.",
-   bin:"paper",level:1,
-   svg:function(){return mksvg('<rect x="8" y="24" width="44" height="36" rx="2" fill="#c8a870"/><polygon points="8,24 30,14 52,24" fill="#b89050"/><rect x="8" y="24" width="44" height="5" fill="#d4b880"/><line x1="30" y1="14" x2="30" y2="24" stroke="#a07840" stroke-width="1"/><rect x="14" y="30" width="32" height="24" rx="1" fill="#b89050" opacity=".4"/>',60,68);},
-   explain:{en:"Clean cardboard → paper bag. Flatten it first!",fr:"Carton propre → sac papier.",de:"Sauberer Karton → Papiersack.",lb:"Proppert Karton → Pabeier-Sak."}},
-  {id:"pizza",name:"Greasy pizza box",
-   desc:"A cardboard pizza box with visible grease stains and cheese.",
-   hint:"Grease contamination means even cardboard goes in residual.",
-   bin:"residual",level:2,
-   svg:function(){return mksvg('<rect x="5" y="26" width="50" height="36" rx="2" fill="#c8a870"/><rect x="5" y="12" width="50" height="16" rx="2" fill="#d4b880"/><rect x="5" y="26" width="50" height="4" fill="#b89050"/><circle cx="30" cy="46" r="13" fill="#e87040" opacity=".75"/><circle cx="30" cy="46" r="10" fill="#e8b020" opacity=".6"/><circle cx="24" cy="43" r="3.5" fill="#c02010" opacity=".8"/><circle cx="35" cy="49" r="3.5" fill="#c02010" opacity=".8"/><ellipse cx="13" cy="50" rx="5" ry="2.5" fill="#c8a020" opacity=".45"/>',60,68);},
-   explain:{en:"Greasy cardboard cannot be recycled → residual (black) bin.",fr:"Le carton gras → poubelle noire.",de:"Fettiger Karton → Restmülltonne.",lb:"Fettegt Karton → Reschtmüll."}},
-  {id:"glass_jar",name:"Empty glass jar",
-   desc:"A clear glass food preserving jar, empty.",
-   hint:"Remove the metal lid first — it goes in PMC, not glass.",
-   bin:"glass",level:1,
-   svg:function(){return mksvg('<rect x="19" y="4" width="22" height="6" rx="2" fill="#888"/><rect x="17" y="10" width="26" height="4" rx="2" fill="#aaa"/><rect x="10" y="14" width="40" height="48" rx="9" fill="#cce8d8" opacity=".8"/><rect x="10" y="14" width="40" height="48" rx="9" fill="none" stroke="#88b898" stroke-width="1.5"/><rect x="12" y="22" width="7" height="30" rx="3.5" fill="#fff" opacity=".32"/>',60,68);},
-   explain:{en:"Glass jars → Glascontainer. Remove the metal lid (lid → PMC).",fr:"Bocaux → conteneur à verre. Enlevez le couvercle.",de:"Glasgläser → Glascontainer. Metalldeckel entfernen.",lb:"Glasdotten → Glascontainer."}},
-  {id:"shampoo",name:"Shampoo bottle",
-   desc:"An empty plastic pump dispenser bottle for shampoo.",
-   hint:"Rinse it out — a tiny residue is fine, thick product is not.",
-   bin:"plastic",level:1,
-   svg:function(){return mksvg('<rect x="24" y="2" width="12" height="8" rx="3" fill="#6a42a0"/><rect x="22" y="10" width="16" height="6" rx="2" fill="#8a62c0"/><rect x="13" y="16" width="34" height="48" rx="13" fill="#9a72d0"/><rect x="13" y="54" width="34" height="10" rx="7" fill="#6a42a0"/><rect x="15" y="24" width="5" height="28" rx="2.5" fill="#fff" opacity=".18"/><rect x="17" y="30" width="26" height="15" rx="3" fill="#fff" opacity=".13"/><text x="30" y="40" text-anchor="middle" font-size="6" fill="#4a2080" font-family="sans-serif" font-weight="700">SHAMPOO</text>',60,68);},
-   explain:{en:"Empty plastic bottles → PMC yellow bag. Rinse first.",fr:"Flacons plastiques vides → sac PMC jaune.",de:"Leere Plastikflaschen → gelber PMC-Sack.",lb:"Eidel Plastikfläschen → giele PMC-Sak."}},
-  {id:"pad",name:"Sanitary pad / napkin",
-   desc:"A used disposable absorbent pad in its wrapper.",
-   hint:"Contains mixed materials: plastic backing, cotton, superabsorbent polymers — none separable.",
-   bin:"residual",level:2,
-   svg:function(){return mksvg('<rect x="7" y="20" width="46" height="28" rx="14" fill="#f0f0f0" stroke="#ddd" stroke-width="1"/><rect x="11" y="24" width="38" height="20" rx="10" fill="#fff" opacity=".8"/><line x1="18" y1="28" x2="42" y2="28" stroke="#e0e0e0" stroke-width="1.2"/><line x1="18" y1="32" x2="42" y2="32" stroke="#e0e0e0" stroke-width="1.2"/><line x1="18" y1="36" x2="42" y2="36" stroke="#e0e0e0" stroke-width="1.2"/><rect x="7" y="16" width="46" height="6" rx="3" fill="#e2eef8"/><rect x="7" y="46" width="46" height="6" rx="3" fill="#e2eef8"/><rect x="7" y="52" width="46" height="12" rx="4" fill="#d0e4f4"/>',60,68);},
-   explain:{en:"Sanitary pads are mixed materials — not recyclable or compostable → residual bin.",fr:"Protections hygiéniques → poubelle noire.",de:"Hygienebinden → Restmülltonne.",lb:"Hygiënebinden → Reschtmüll."}},
-  {id:"tampon",name:"Tampon",
-   desc:"A single-use tampon with plastic applicator and retrieval cord.",
-   hint:"Never put it in the organic bin — it's plastic and synthetic fibre, not organic matter.",
-   bin:"residual",level:2,
-   svg:function(){return mksvg('<rect x="25" y="4" width="10" height="32" rx="5" fill="#f0f0f0" stroke="#ddd" stroke-width="1"/><rect x="23" y="8" width="14" height="4" rx="2" fill="#e8e8e8"/><rect x="23" y="16" width="14" height="4" rx="2" fill="#e8e8e8"/><rect x="23" y="24" width="14" height="4" rx="2" fill="#e8e8e8"/><rect x="28" y="36" width="4" height="24" rx="2" fill="#d0d0d0"/><ellipse cx="30" cy="61" rx="5" ry="2.5" fill="#bbb"/><rect x="26" y="3" width="8" height="5" rx="4" fill="#fff" stroke="#ddd" stroke-width="1"/>',60,68);},
-   explain:{en:"Tampons (cotton, plastic, synthetic fibres) → residual bin only.",fr:"Tampons → poubelle noire uniquement.",de:"Tampons → nur Restmüll.",lb:"Tampons → nëmmen Reschtmüll."}},
-  {id:"terracotta",name:"Broken terracotta pot",
-   desc:"A cracked orange clay flower pot, clearly pottery.",
-   hint:"Pottery melts at a different temperature than glass — it would ruin the Glascontainer batch.",
-   bin:"residual",level:2,
-   svg:function(){return mksvg('<path d="M9 52 Q9 64 30 64 Q51 64 51 52 L45 22 Q44 16 30 16 Q16 16 15 22Z" fill="#c06030"/><rect x="13" y="12" width="34" height="8" rx="4" fill="#d07040"/><path d="M30 16 L27 12" stroke="#a04020" stroke-width="1.5" fill="none"/><path d="M27 12 L22 32 L32 42" stroke="#a04020" stroke-width="2" fill="none" stroke-linecap="round"/>',60,68);},
-   explain:{en:"Ceramics and terracotta are NOT glass → residual bin or Waste Centre.",fr:"La céramique N'EST PAS du verre → poubelle noire.",de:"Keramik ist KEIN Glas → Restmüll.",lb:"Keramik ass KEEN Glas → Reschtmüll."}},
-  {id:"tissue",name:"Used paper tissue",
-   desc:"A crumpled, used single-ply paper tissue.",
-   hint:"Even though it's paper, contamination from use makes it residual.",
-   bin:"residual",level:2,
-   svg:function(){return mksvg('<path d="M14 18 Q30 12 46 20 L43 56 Q30 62 17 56Z" fill="#f4f0e8"/><path d="M19 20 Q30 16 41 22 L38 52 Q30 56 22 52Z" fill="#fff" opacity=".55"/><path d="M21 28 Q28 24 36 28" stroke="#e0e0e0" stroke-width="1.2" fill="none"/><path d="M19 38 Q25 33 33 36 Q39 38 41 34" stroke="#e0e0e0" stroke-width="1.2" fill="none"/>',60,68);},
-   explain:{en:"Used tissues are contaminated → residual bin, not paper.",fr:"Mouchoirs usagés → poubelle noire, pas papier.",de:"Benutzte Taschentücher → Restmüll, nicht Papier.",lb:"Gebrauchte Tissue → Reschtmüll."}},
-  {id:"banana",name:"Banana peel",
-   desc:"A soft, yellow-brown banana peel discarded after eating.",
-   hint:"It will fully decompose — the bio bin turns it into compost.",
-   bin:"organic",level:1,
-   svg:function(){return mksvg('<path d="M20 62 Q8 42 12 20 Q14 8 24 6 Q28 5 30 9 Q22 12 22 26 Q22 46 30 62Z" fill="#d4a020"/><path d="M30 62 Q20 42 22 22 Q24 10 34 8 Q38 8 38 13 Q30 15 30 28 Q30 48 36 62Z" fill="#e8ba28"/><path d="M36 62 Q32 46 34 28 Q36 14 42 14 Q46 14 46 20 Q40 20 38 35 Q36 50 40 62Z" fill="#d4a020"/><path d="M17 11 Q25 4 35 5 Q42 6 46 12" stroke="#b88010" stroke-width="1.5" fill="none"/>',60,68);},
-   explain:{en:"Fruit scraps → organic/bio bin for composting.",fr:"Épluchures de fruits → poubelle organique.",de:"Obstabfälle → Bio-Tonne.",lb:"Uebst-Offall → Bio-Tonne."}},
-  {id:"coffee",name:"Coffee grounds & paper filter",
-   desc:"A used paper cone filter filled with wet coffee grounds.",
-   hint:"Both the grounds and the paper filter are organic — no need to separate them.",
-   bin:"organic",level:1,
-   svg:function(){return mksvg('<path d="M13 26 Q11 20 16 15 Q22 10 30 10 Q38 10 44 15 Q49 20 47 26 L41 58 Q39 64 30 64 Q21 64 19 58Z" fill="#c8e8f2"/><path d="M17 28 Q15 22 20 17 Q26 12 30 12 Q34 12 40 17 Q45 22 43 28 L37 56 Q35 62 30 62 Q25 62 23 56Z" fill="#5a2e08"/><ellipse cx="30" cy="20" rx="13" ry="5" fill="#3c1a06"/><rect x="25" y="6" width="10" height="8" rx="2" fill="#c0e0ea"/>',60,68);},
-   explain:{en:"Coffee grounds and paper filters → organic/bio bin.",fr:"Marc de café et filtres → poubelle organique.",de:"Kaffeesatz und Papierfilter → Bio-Tonne.",lb:"Kaffeegronnen → Bio-Tonne."}},
-  {id:"cat_litter",name:"Cat litter bag (used)",
-   desc:"A sealed bag of used clay-based cat litter.",
-   hint:"Cat litter is explicitly prohibited from the bio/organic bin in Luxembourg.",
-   bin:"residual",level:2,
-   svg:function(){return mksvg('<rect x="7" y="26" width="46" height="38" rx="5" fill="#d4c090"/><rect x="7" y="26" width="46" height="9" rx="5" fill="#b8a070"/><ellipse cx="30" cy="26" rx="23" ry="7" fill="#c8b080"/><rect x="24" y="12" width="12" height="16" rx="3" fill="#c0a870"/><ellipse cx="30" cy="12" rx="9" ry="4" fill="#b09060"/><rect x="11" y="37" width="38" height="20" rx="3" fill="#c0a870" opacity=".4"/><text x="30" y="48" text-anchor="middle" font-size="6.5" fill="#7a6030" font-family="sans-serif" font-weight="700">CAT LITTER</text>',60,68);},
-   explain:{en:"Cat litter → residual bin. Explicitly forbidden from the organic/bio bin.",fr:"Litière pour chat → poubelle noire. Interdite dans la poubelle organique.",de:"Katzenstreu → Restmüll. Verboten in der Bio-Tonne.",lb:"Katzestréi → Reschtmüll, NET Bio-Tonne."}},
-  {id:"battery",name:"AA battery",
-   desc:"A standard 1.5V alkaline AA battery.",
-   hint:"Look for the small battery collection box near supermarket checkouts.",
-   bin:"residual",level:2,special:"battery",
-   svg:function(){return mksvg('<rect x="16" y="10" width="28" height="52" rx="7" fill="#e0d818"/><rect x="22" y="5" width="16" height="7" rx="3" fill="#c8c8c8"/><rect x="26" y="3" width="8" height="4" rx="2" fill="#aaa"/><rect x="16" y="54" width="28" height="8" rx="5" fill="#c0b810"/><rect x="18" y="14" width="24" height="38" rx="4" fill="#c8c010" opacity=".5"/><text x="30" y="30" text-anchor="middle" font-size="8" fill="#706000" font-family="sans-serif" font-weight="700">AA</text><text x="30" y="40" text-anchor="middle" font-size="6" fill="#706000" font-family="sans-serif">1.5V</text>',60,68);},
-   explain:{en:"Batteries → dedicated collection boxes in supermarkets. Never in regular bins!",fr:"Piles → points de collecte en supermarchés.",de:"Batterien → Sammelboxen im Supermarkt.",lb:"Batterien → Sammelboischt am Supermarché."}},
-  {id:"meds",name:"Medication blister pack",
-   desc:"A foil-backed plastic blister pack with some pills remaining.",
-   hint:"Pharmacies are legally required to take back old medication — it's free.",
-   bin:"residual",level:2,special:"medication",
-   svg:function(){return mksvg('<rect x="6" y="14" width="48" height="40" rx="5" fill="#c0d8f0"/><rect x="6" y="14" width="48" height="40" rx="5" fill="none" stroke="#80a8d0" stroke-width="1"/><ellipse cx="19" cy="26" rx="8" ry="8" fill="#e8d890"/><ellipse cx="30" cy="26" rx="8" ry="8" fill="#e8d890"/><ellipse cx="41" cy="26" rx="8" ry="8" fill="#d8c880" opacity=".5"/><ellipse cx="19" cy="42" rx="8" ry="8" fill="#e8d890"/><ellipse cx="30" cy="42" rx="8" ry="8" fill="#ccc" opacity=".4"/><ellipse cx="41" cy="42" rx="8" ry="8" fill="#e8d890"/><ellipse cx="19" cy="26" rx="6" ry="6" fill="#e8b830"/><ellipse cx="30" cy="26" rx="6" ry="6" fill="#e8b830"/><ellipse cx="19" cy="42" rx="6" ry="6" fill="#e8b830"/><ellipse cx="41" cy="42" rx="6" ry="6" fill="#e8b830"/>',60,68);},
-   explain:{en:"Medications → return to a pharmacy (Apotheke) for safe disposal.",fr:"Médicaments → rapporter en pharmacie.",de:"Medikamente → Apotheke zurückbringen.",lb:"Medikamenter → an d'Apothéik."}},
-  {id:"magazine",name:"Glossy magazine",
-   desc:"A coated-paper lifestyle magazine with a shiny cover.",
-   hint:"Luxembourg's paper stream accepts glossy/coated paper — unlike some countries.",
-   bin:"paper",level:1,
-   svg:function(){return mksvg('<rect x="7" y="6" width="46" height="58" rx="2" fill="#e03040"/><rect x="7" y="6" width="46" height="14" rx="2" fill="#b01828"/><text x="30" y="17" text-anchor="middle" font-size="7.5" fill="#fff" font-family="sans-serif" font-weight="700">MAGAZINE</text><rect x="11" y="24" width="22" height="28" rx="2" fill="#fff" opacity=".18"/><rect x="35" y="24" width="14" height="6" rx="1" fill="#fff" opacity=".3"/><rect x="35" y="32" width="12" height="4" rx="1" fill="#fff" opacity=".2"/>',60,68);},
-   explain:{en:"Glossy magazines → paper/press collection in Luxembourg.",fr:"Magazines glacés → collecte papier/presse.",de:"Hochglanzmagazine → Papiersammlung.",lb:"Glanzzäitungen → Pabeiersammlung."}},
-  {id:"egg_carton",name:"Paper egg carton",
-   desc:"A moulded grey paper-pulp tray holding 6 or 12 eggs.",
-   hint:"If it's moulded grey pulp, it's paper. If it's clear plastic, it's PMC.",
-   bin:"paper",level:1,
-   svg:function(){return mksvg('<rect x="5" y="32" width="50" height="28" rx="3" fill="#d0b888"/><rect x="5" y="26" width="50" height="8" rx="3" fill="#c0a878"/><ellipse cx="17" cy="26" rx="8" ry="7" fill="#b89858"/><ellipse cx="30" cy="26" rx="8" ry="7" fill="#c0a868"/><ellipse cx="43" cy="26" rx="8" ry="7" fill="#b89858"/><ellipse cx="17" cy="26" rx="5.5" ry="5" fill="#a88848"/><ellipse cx="30" cy="26" rx="5.5" ry="5" fill="#b09858"/><ellipse cx="43" cy="26" rx="5.5" ry="5" fill="#a88848"/><text x="30" y="52" text-anchor="middle" font-size="6" fill="#7a6030" font-family="sans-serif">EGG CARTON</text>',60,68);},
-   explain:{en:"Paper egg cartons → paper bag. Plastic egg cartons → PMC bag.",fr:"Boîtes à œufs en papier → sac papier.",de:"Papier-Eierkartons → Papiersack.",lb:"Pabeier-Eierdoten → Pabeier-Sak."}},
-  {id:"motor_oil",name:"Used motor oil canister",
-   desc:"A partly empty yellow plastic canister labelled 'Motor Oil', visibly dirty.",
-   hint:"This is hazardous waste — take it to the Superdreckskëscht, never pour down the drain.",
-   bin:"residual",level:3,special:"bulky",
-   svg:function(){return mksvg('<rect x="11" y="16" width="38" height="48" rx="5" fill="#e09818"/><rect x="11" y="16" width="38" height="48" rx="5" fill="none" stroke="#b07010" stroke-width="1"/><rect x="15" y="8" width="30" height="10" rx="2" fill="#d08010"/><rect x="25" y="3" width="10" height="7" rx="3" fill="#b06000"/><rect x="13" y="22" width="34" height="34" rx="3" fill="#d09010" opacity=".5"/><text x="30" y="36" text-anchor="middle" font-size="7" fill="#7a4000" font-family="sans-serif" font-weight="700">MOTOR</text><text x="30" y="45" text-anchor="middle" font-size="7" fill="#7a4000" font-family="sans-serif" font-weight="700">OIL</text>',60,68);},
-   explain:{en:"Used motor oil → Superdreckskëscht or Waste Centre. Never pour down the drain!",fr:"Huile de moteur → Superdreckskëscht. Jamais dans l'évier!",de:"Altöl → Superdreckskëscht. Niemals in den Abfluss!",lb:"Al Moteroil → Superdreckskëscht."}},
-  {id:"smartphone",name:"Old smartphone",
-   desc:"A cracked, non-functional touchscreen smartphone.",
-   hint:"It contains lithium, rare metals and a battery — all hazardous if landfilled.",
-   bin:"residual",level:2,special:"bulky",
-   svg:function(){return mksvg('<rect x="13" y="4" width="34" height="60" rx="7" fill="#282828"/><rect x="15" y="10" width="30" height="46" rx="3" fill="#1a3a58"/><rect x="13" y="4" width="34" height="60" rx="7" fill="none" stroke="#404040" stroke-width="1"/><rect x="22" y="5" width="16" height="3" rx="1.5" fill="#404040"/><circle cx="38" cy="6.5" rx="2" fill="#303030"/><rect x="17" y="14" width="9" height="7" rx="1.5" fill="#4a7ab0" opacity=".85"/><rect x="28" y="14" width="9" height="7" rx="1.5" fill="#7ab04a" opacity=".85"/><rect x="17" y="24" width="27" height="22" rx="2" fill="#2a5888" opacity=".6"/><rect x="21" y="54" width="18" height="4" rx="2" fill="#383838"/>',60,68);},
-   explain:{en:"Electronics → e-waste collection point or Recyclable Waste Centre.",fr:"Appareils électroniques → point de collecte e-déchets.",de:"Elektrogeräte → E-Müll-Sammelstelle.",lb:"Elektrogeräter → spezielle Sammelpunkt."}},
-  {id:"biodeg",name:"'Biodegradable' plastic bag",
-   desc:"A thin shopping bag marked 'biodegradable' or 'compostable' in green text.",
-   hint:"In Luxembourg, only bags certified 'OK compost HOME' may go in the bio bin — standard 'biodegradable' bags do not qualify.",
-   bin:"residual",level:3,
-   svg:function(){return mksvg('<path d="M17 14 Q30 8 43 14 L45 56 Q44 62 30 64 Q16 62 15 56Z" fill="#c8e0b0" opacity=".9"/><path d="M21 14 L19 56" stroke="#90c060" stroke-width="1" fill="none"/><path d="M39 14 L41 56" stroke="#90c060" stroke-width="1" fill="none"/><rect x="20" y="4" width="9" height="12" rx="4.5" fill="#c0d8a8"/><rect x="31" y="4" width="9" height="12" rx="4.5" fill="#b8d0a0"/><ellipse cx="24.5" cy="4" rx="4.5" ry="3" fill="#b8d0a0"/><ellipse cx="35.5" cy="4" rx="4.5" ry="3" fill="#b0c898"/><rect x="17" y="30" width="26" height="18" rx="3" fill="#fff" opacity=".45"/><text x="30" y="39" text-anchor="middle" font-size="6" fill="#406820" font-family="sans-serif" font-weight="700">BIO</text><text x="30" y="46" text-anchor="middle" font-size="5" fill="#406820" font-family="sans-serif">degradable</text>',60,68);},
-   explain:{en:"Biodegradable plastic bags are NOT accepted in the organic bin in Luxembourg → residual bin.",fr:"Sacs biodégradables → poubelle noire. Pas dans l'organique!",de:"Biologisch abbaubare Plastiktüten → Restmüll!",lb:"Biologesch ofbaubar Plastikstéit → Reschtmüll."}},
-  {id:"olive_oil",name:"Olive oil bottle (glass)",
-   desc:"An empty, rinsed green glass bottle that held olive oil.",
-   hint:"The paper label can stay on — the sorting process at the Glascontainer handles it.",
-   bin:"glass",level:1,
-   svg:function(){return mksvg('<rect x="26" y="2" width="8" height="5" rx="2" fill="#888"/><rect x="24" y="7" width="12" height="6" rx="3" fill="#a0a050"/><rect x="20" y="13" width="20" height="4" rx="2" fill="#b0b060"/><rect x="12" y="17" width="36" height="48" rx="10" fill="#d4d870" opacity=".9"/><rect x="12" y="17" width="36" height="48" rx="10" fill="none" stroke="#a0a040" stroke-width="1"/><rect x="14" y="25" width="6" height="30" rx="3" fill="#fff" opacity=".25"/><rect x="18" y="30" width="24" height="22" rx="3" fill="#fff" opacity=".15"/><text x="30" y="42" text-anchor="middle" font-size="5.5" fill="#6a6a20" font-family="sans-serif" font-weight="700">OLIVE OIL</text>',60,68);},
-   explain:{en:"Glass bottles → Glascontainer after rinsing.",fr:"Bouteilles en verre → conteneur à verre.",de:"Glasflaschen → Glascontainer.",lb:"Glasfläschen → Glascontainer."}},
-  {id:"crisp_bag",name:"Foil crisp bag",
-   desc:"A shiny metallic-looking sealed bag of crisps, now empty.",
-   hint:"The inside is a bonded metal-plastic film — it cannot be separated for recycling.",
-   bin:"residual",level:2,
-   svg:function(){return mksvg('<path d="M18 8 Q30 4 42 8 L46 58 Q44 64 30 66 Q16 64 14 58Z" fill="#e8c030" opacity=".95"/><path d="M22 8 L20 58" stroke="#c8a010" stroke-width="1" fill="none"/><path d="M38 8 L40 58" stroke="#c8a010" stroke-width="1" fill="none"/><rect x="18" y="4" width="24" height="6" rx="3" fill="#c8a010"/><ellipse cx="30" cy="4" rx="12" ry="3.5" fill="#b89000"/><rect x="16" y="28" width="28" height="20" rx="3" fill="#fff" opacity=".2"/><text x="30" y="38" text-anchor="middle" font-size="6" fill="#7a5000" font-family="sans-serif" font-weight="700">CRISPS</text>',60,68);},
-   explain:{en:"Foil crisp bags are multilayer (plastic + metal film) — not separable → residual bin.",fr:"Sachets de chips (multicouche) → poubelle noire.",de:"Folie-Chipstüten (Mehrschicht) → Restmüll.",lb:"Chipstüten aus Folie → Reschtmüll."}},
-  {id:"cooked_meat",name:"Cooked meat bone",
-   desc:"A leftover T-bone steak bone with scraps of cooked meat.",
-   hint:"Cooked bones and meat scraps are accepted in the organic bin in Luxembourg.",
-   bin:"organic",level:1,
-   svg:function(){return mksvg(
-     '<rect x="24" y="18" width="12" height="36" rx="4" fill="#e8d8b8"/>'+
-     '<circle cx="20" cy="18" r="8" fill="#e8d8b8"/>'+
-     '<circle cx="20" cy="18" r="5" fill="#f0e4cc"/>'+
-     '<circle cx="40" cy="18" r="8" fill="#e8d8b8"/>'+
-     '<circle cx="40" cy="18" r="5" fill="#f0e4cc"/>'+
-     '<circle cx="20" cy="54" r="8" fill="#e8d8b8"/>'+
-     '<circle cx="20" cy="54" r="5" fill="#f0e4cc"/>'+
-     '<circle cx="40" cy="54" r="8" fill="#e8d8b8"/>'+
-     '<circle cx="40" cy="54" r="5" fill="#f0e4cc"/>'+
-     '<ellipse cx="30" cy="30" rx="5" ry="4" fill="#c87050" opacity=".7"/>'+
-     '<ellipse cx="30" cy="40" rx="4" ry="3" fill="#b86040" opacity=".6"/>',
-   60,68);},
-   explain:{en:"Cooked food scraps including meat and bones → organic/bio bin in Luxembourg.",fr:"Restes de nourriture cuite → poubelle organique.",de:"Gekochte Essensreste → Bio-Tonne.",lb:"Gekachte Reschten → Bio-Tonne."}},
-  {id:"razor",name:"Disposable razor",
-   desc:"A single-use plastic razor with a fixed metal blade cartridge.",
-   hint:"The plastic handle and metal blades are fused — they cannot be separated for recycling.",
-   bin:"residual",level:3,
-   svg:function(){return mksvg('<rect x="26" y="4" width="8" height="38" rx="4" fill="#3a80c0"/><rect x="22" y="36" width="16" height="8" rx="2" fill="#2a60a0"/><rect x="18" y="28" width="24" height="12" rx="3" fill="#c0c0c0"/><rect x="18" y="28" width="24" height="3" rx="1" fill="#e0e0e0"/><rect x="18" y="33" width="24" height="2" rx="1" fill="#d0d0d0"/><rect x="28" y="8" width="4" height="26" rx="2" fill="#5aa0e0" opacity=".4"/>',60,68);},
-   explain:{en:"Disposable razors are composite (plastic + metal blades) → residual bin.",fr:"Rasoirs jetables (plastique + métal) → poubelle noire.",de:"Einwegrasier → Restmüll.",lb:"Wegwerfrasier → Reschtmüll."}},
-  {id:"teabag",name:"Paper tea bag",
-   desc:"A square paper tea bag with a string and cardboard tag.",
-   hint:"Only paper tea bags go in bio. Plastic mesh bags (nylon pyramids) go in residual.",
-   bin:"organic",level:2,
-   svg:function(){return mksvg('<rect x="18" y="8" width="24" height="36" rx="3" fill="#d4c0a0"/><rect x="18" y="8" width="24" height="36" rx="3" fill="none" stroke="#b8a080" stroke-width="1"/><line x1="20" y1="14" x2="40" y2="14" stroke="#b8a080" stroke-width="1" opacity=".5"/><line x1="20" y1="20" x2="40" y2="20" stroke="#b8a080" stroke-width="1" opacity=".5"/><line x1="20" y1="26" x2="40" y2="26" stroke="#b8a080" stroke-width="1" opacity=".5"/><line x1="20" y1="32" x2="40" y2="32" stroke="#b8a080" stroke-width="1" opacity=".5"/><rect x="29" y="44" width="2" height="14" rx="1" fill="#888"/><ellipse cx="30" cy="60" rx="7" ry="4" fill="#c8b060"/>',60,68);},
-   explain:{en:"Paper tea bags → organic bin. Nylon pyramid tea bags → residual.",fr:"Sachets de thé en papier → bio. Sachets nylon → poubelle noire.",de:"Papier-Teebeutel → Bio-Tonne. Nylon-Teebeutel → Restmüll.",lb:"Pabeier-Téibeilchen → Bio-Tonne."}},
-  {id:"window_glass",name:"Broken window pane",
-   desc:"A shard of flat transparent window glass with a sharp edge.",
-   hint:"Flat glass melts at a different temperature than bottle glass — they cannot be processed together.",
-   bin:"residual",level:3,
-   svg:function(){return mksvg('<rect x="8" y="8" width="44" height="52" rx="2" fill="#b8d8f0" opacity=".6"/><rect x="8" y="8" width="44" height="52" rx="2" fill="none" stroke="#78a8d0" stroke-width="2"/><rect x="6" y="6" width="48" height="8" rx="2" fill="#8ab0d0"/><rect x="6" y="54" width="48" height="6" rx="2" fill="#8ab0d0"/><rect x="6" y="6" width="8" height="54" rx="2" fill="#8ab0d0"/><rect x="46" y="6" width="8" height="54" rx="2" fill="#8ab0d0"/><path d="M30 10 L52 40" stroke="#78a8d0" stroke-width="2" fill="none"/><path d="M30 10 L18 58" stroke="#78a8d0" stroke-width="1.5" fill="none"/>',60,68);},
-   explain:{en:"Flat/window glass is NOT bottle glass → must go to a Waste Centre.",fr:"Verre plat ≠ verre bouteille → centre de collecte.",de:"Fensterglas ≠ Flaschenglas → Wertstoffhof.",lb:"Fensterglas ass NET Flascheglas → Recyclage-Zentrum."}},
-  {id:"yogurt_pot",name:"Plastic yogurt pot",
-   desc:"A small white plastic tub that held yogurt, now empty.",
-   hint:"Rinse out visible yogurt — a dry pot goes straight in PMC.",
-   bin:"plastic",level:1,
-   svg:function(){return mksvg('<path d="M14 16 L10 60 Q10 66 30 66 Q50 66 50 60 L46 16Z" fill="#f0f0f8"/><rect x="12" y="10" width="36" height="8" rx="4" fill="#e0e0ee"/><rect x="12" y="16" width="36" height="2" fill="#c8c8e0"/><rect x="16" y="24" width="28" height="24" rx="2" fill="#fff" opacity=".3"/><text x="30" y="36" text-anchor="middle" font-size="6.5" fill="#5050a0" font-family="sans-serif" font-weight="700">YOGURT</text><ellipse cx="30" cy="62" rx="20" ry="5" fill="#d0d0e8"/>',60,68);},
-   explain:{en:"Plastic food containers (yogurt pots) → PMC yellow bag.",fr:"Pots en plastique (yaourt) → sac PMC jaune.",de:"Kunststoffbehälter (Joghurtbecher) → gelber PMC-Sack.",lb:"Plastikdotten (Joghurt) → giele PMC-Sak."}}
-];
+// ── Age filtering ────────────────────────────────────────────────────────────
+function itemOkForAge(it,ag){
+  if(ag==="child") return it.age==="all";
+  if(ag==="adult") return it.age!=="child" && it.age!=="senior";
+  if(ag==="senior") return it.age!=="child" && it.age!=="adult";
+  return true;
+}
+
+// ── Tab navigation ───────────────────────────────────────────────────────────
+function showTab(t){
+  ["game-setup","search","about"].forEach(function(id){
+    document.getElementById("tab-"+id).style.display=id===t?"block":"none";
+  });
+  document.querySelectorAll(".tab").forEach(function(el,i){
+    el.classList.toggle("active",["game-setup","search","about"][i]===t);
+  });
+}
 
 // ── Setup ────────────────────────────────────────────────────────────────────
+function selAge(ag){
+  ageGroup=ag;
+  ["child","adult","senior"].forEach(function(a){document.getElementById("ag-"+a).classList.remove("sel");});
+  document.getElementById("ag-"+ag).classList.add("sel");
+  checkReady();
+}
 function selLv(lv){
   difficulty=lv;
-  ["beginner","advanced","expert"].forEach(function(l){document.getElementById("lb-"+l).classList.remove("sel");});
-  document.getElementById("lb-"+lv).classList.add("sel");
+  ["beginner","advanced","expert"].forEach(function(l){document.getElementById("lv-"+l).classList.remove("sel");});
+  document.getElementById("lv-"+lv).classList.add("sel");
   var d=document.getElementById("lvdesc");
   d.textContent=LVDESCS[lv];d.classList.add("set");
   checkReady();
 }
 function selQty(q){
   qty=q;
-  [10,30,0].forEach(function(v){document.getElementById("lb-"+v).classList.remove("sel");});
-  document.getElementById("lb-"+q).classList.add("sel");
+  [10,30,0].forEach(function(v){document.getElementById("q-"+v).classList.remove("sel");});
+  document.getElementById("q-"+q).classList.add("sel");
   checkReady();
 }
 function checkReady(){
-  var ready=difficulty!==null&&qty!==null;
+  var ok=ageGroup!==null&&difficulty!==null&&qty!==null;
   var btn=document.getElementById("sbtn");
-  if(ready){btn.classList.add("ready");document.getElementById("setup-hint").textContent="";}
+  var err=document.getElementById("setup-err");
+  if(ok){btn.classList.add("ready");err.textContent="";}
   else{
     btn.classList.remove("ready");
-    document.getElementById("setup-hint").textContent=
-      !difficulty&&qty===null?"Please select a difficulty and number of items first.":
-      !difficulty?"Please select a difficulty level.":
-      "Please select a number of items.";
+    if(!ageGroup&&!difficulty&&qty===null) err.textContent="Please select who is playing, a difficulty, and number of items.";
+    else if(!ageGroup) err.textContent="Please select who is playing (children / adults / seniors).";
+    else if(!difficulty) err.textContent="Please select a difficulty level.";
+    else err.textContent="Please select a number of items.";
   }
 }
-function tryStart(){if(!difficulty||qty===null){checkReady();return;}startGame();}
-function goSetup(){clearTimer();["sg","se"].forEach(function(id){document.getElementById(id).style.display="none";});document.getElementById("ss").style.display="block";}
+function tryStart(){if(!ageGroup||!difficulty||qty===null){checkReady();return;}startGame();}
+function goSetup(){
+  clearTimer();
+  document.getElementById("sg").style.display="none";
+  document.getElementById("se").style.display="none";
+  document.getElementById("ss").style.display="block";
+}
 
-// ── Pool ─────────────────────────────────────────────────────────────────────
+// ── Pool helpers ─────────────────────────────────────────────────────────────
 function shuffle(a){var arr=a.slice();for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
 function pickItems(pool,n){
   var unseen=pool.filter(function(it){return usedIds.indexOf(it.id)===-1;});
@@ -494,49 +1140,58 @@ function pickItems(pool,n){
   picked.forEach(function(it){usedIds.push(it.id);});
   return picked;
 }
-function updBinLabels(){Object.keys(BLAB).forEach(function(b){var el=document.getElementById("bl-"+b);if(el)el.textContent=BLAB[b][lang]||BLAB[b].en;});}
+function buildPool(){
+  var maxLv=difficulty==="beginner"?1:difficulty==="advanced"?2:3;
+  return POOL.filter(function(it){
+    return it.level<=maxLv && itemOkForAge(it,ageGroup);
+  });
+}
+function updBinLabels(){
+  Object.keys(BLAB).forEach(function(b){
+    var el=document.getElementById("bl-"+b);
+    if(el)el.textContent=BLAB[b][lang]||BLAB[b].en;
+  });
+}
 
 // ── Game ─────────────────────────────────────────────────────────────────────
 function startGame(){
-  var maxLv=difficulty==="beginner"?1:difficulty==="advanced"?2:3;
-  var pool=POOL.filter(function(it){return it.level<=maxLv;});
+  var pool=buildPool();
   queue=pickItems(pool,qty);
   score=0;lives=3;current=0;results=[];answering=true;streak=0;hintUsed=false;wrongLog=[];
   document.getElementById("ss").style.display="none";
   document.getElementById("se").style.display="none";
   document.getElementById("sg").style.display="block";
-  var bins=LVBINS[difficulty];
-  ["glass","plastic","paper","organic","residual"].forEach(function(b){
-    document.getElementById("bin-"+b).classList.toggle("locked",bins.indexOf(b)===-1);
-  });
   document.getElementById("twrap").style.display=difficulty==="expert"?"block":"none";
   document.getElementById("stpill").style.display="none";
+  // senior mode: slightly larger text in item area
+  document.getElementById("ia").classList.toggle("senior-mode",ageGroup==="senior");
   updBinLabels();updHUD();renderProg();showItem();
   setFb("","Click a bin to sort the item!","");
 }
+
 function updHUD(){
   document.getElementById("scpill").textContent="⭐ "+score;
   document.getElementById("lvpill").textContent=["","❤️","❤️❤️","❤️❤️❤️"][Math.max(0,lives)];
-  document.getElementById("lpill").textContent=difficulty==="expert"?"⚡ Expert":difficulty==="advanced"?"🔥 Advanced":"🌱 Beginner";
+  var lbl=difficulty==="expert"?"⚡ Expert":difficulty==="advanced"?"🔥 Advanced":"🌱 Beginner";
+  document.getElementById("lpill").textContent=lbl+(ageGroup==="child"?" 👶":ageGroup==="senior"?" 👴":"");
   if(streak>=3){document.getElementById("stpill").style.display="";document.getElementById("stpill").textContent="🎯 "+streak;}
   else document.getElementById("stpill").style.display="none";
 }
+
 function renderProg(){
   var bar=document.getElementById("prog");bar.innerHTML="";
   var total=qty===0?Math.max(current+3,results.length+1):queue.length;
   for(var i=0;i<total;i++){
     var d=document.createElement("div");d.className="pd";
-    if(i<results.length)d.classList.add(results[i]==="ok"?"ok":results[i]==="hinted"?"hinted":"fail");
+    if(i<results.length)d.classList.add(results[i]==="ok"?"ok":results[i]==="hint"?"hint":"fail");
     else if(i===current)d.classList.add("cur");
     bar.appendChild(d);
   }
 }
+
 function showItem(){
   if(qty>0&&current>=queue.length){endGame();return;}
-  if(qty===0&&current>=queue.length){
-    var maxLv=difficulty==="beginner"?1:difficulty==="advanced"?2:3;
-    queue=pickItems(POOL.filter(function(it){return it.level<=maxLv;}),0);current=0;
-  }
+  if(qty===0&&current>=queue.length){queue=pickItems(buildPool(),0);current=0;}
   var it=queue[current];
   hintUsed=false;
   document.getElementById("isvg").innerHTML=it.svg();
@@ -544,24 +1199,27 @@ function showItem(){
   document.getElementById("idesc").textContent=it.desc||"";
   var hel=document.getElementById("ihint");
   hel.style.display="none";hel.textContent="";
-  var hbtn=document.getElementById("hint-btn");
+  var hbtn=document.getElementById("hbtn");
   hbtn.disabled=false;hbtn.textContent="💡 Hint (−5 pts)";
   answering=true;clearFlash();
-  if(difficulty==="expert")startTimer();
+  document.getElementById("fine-note").style.display="none";
+  if(difficulty==="expert"&&ageGroup!=="senior")startTimer();
 }
+
 function useHint(){
   if(!answering||hintUsed)return;
   hintUsed=true;
   var it=queue[current];
   var hel=document.getElementById("ihint");
   hel.textContent="💡 "+it.hint;hel.style.display="inline-block";
-  var hbtn=document.getElementById("hint-btn");
+  var hbtn=document.getElementById("hbtn");
   hbtn.disabled=true;hbtn.textContent="💡 Hint used";
 }
+
 function startTimer(){
   clearTimer();timeLeft=8;
   var bar=document.getElementById("tbar");
-  bar.style.width="100%";bar.style.background="var(--blue)";
+  bar.style.width="100%";bar.style.background=getComputedStyle(document.documentElement).getPropertyValue("--blue").trim()||"#378ADD";
   timerInt=setInterval(function(){
     timeLeft-=0.25;
     var pct=Math.max(0,(timeLeft/8)*100);
@@ -576,85 +1234,109 @@ function timeExpired(){
   if(!answering)return;
   answering=false;lives--;streak=0;results.push("fail");
   var it=queue[current];
-  wrongLog.push({item:it,chosenBin:null,timed:true});
+  wrongLog.push({item:it,chosen:null,timed:true});
   document.getElementById("bin-"+it.bin).classList.add("bok");
-  setFb("no","⏱️ Time's up!","Correct bin: "+it.bin);
+  setFb("no","⏱️ Time's up!","Correct bin: "+(BLAB[it.bin][lang]||BLAB[it.bin].en));
+  showFineNote();
   updHUD();renderProg();
   if(lives<=0){setTimeout(endGame,2200);return;}
-  current++;setTimeout(function(){clearFlash();showItem();},2600);
+  current++;setTimeout(function(){clearFlash();showItem();},2800);
 }
+
 function setFb(cls,main,sub){
   var el=document.getElementById("fb");el.className=cls||"";
   document.getElementById("fbm").textContent=main;
   document.getElementById("fbs").textContent=sub;
+  document.getElementById("fine-note").style.display="none";
+}
+function showFineNote(){
+  var el=document.getElementById("fine-note");
+  el.textContent=FINE_MSGS[lang]||FINE_MSGS.en;
+  el.style.display="block";
 }
 function clearFlash(){["glass","plastic","paper","organic","residual"].forEach(function(b){document.getElementById("bin-"+b).classList.remove("bok","bno");});}
+
 function trySort(chosen){
   if(!answering)return;
-  if(LVBINS[difficulty].indexOf(chosen)===-1)return;
   answering=false;clearTimer();
   var it=queue[current];
   var correct=chosen===it.bin;
   document.getElementById("bin-"+chosen).classList.add(correct?"bok":"bno");
   if(!correct)document.getElementById("bin-"+it.bin).classList.add("bok");
   var expl=it.explain[lang]||it.explain.en;
-  var extra=it.special?(EXTRAS[it.special][lang]||EXTRAS[it.special].en):"";
+  var extra=it.special?(EXTRAS[it.special]?EXTRAS[it.special][lang]||EXTRAS[it.special].en:""):"";
   if(correct){
-    var pts=(difficulty==="expert"?15:10)-(hintUsed?5:0);
+    var pts=(difficulty==="expert"?15:BASE_PTS)-(hintUsed?5:0);
     if(pts<0)pts=0;
-    score+=pts;streak++;results.push(hintUsed?"hinted":"ok");
+    score+=pts;streak++;results.push(hintUsed?"hint":"ok");
     var bonus=streak>=3?" 🎯×"+streak:"";
-    setFb("ok","✅ Correct! +"+pts+" pts"+bonus+(hintUsed?" (hint: −5)":""),expl+(extra?"\n"+extra:""));
+    setFb("ok","✅ Correct! +"+pts+" pts"+bonus+(hintUsed?" (hint: −5)":""),expl+(extra?" "+extra:""));
   } else {
     lives--;streak=0;results.push("fail");
-    wrongLog.push({item:it,chosenBin:chosen,timed:false});
-    setFb("no","❌ Not quite!",expl+(extra?"\n"+extra:""));
+    wrongLog.push({item:it,chosen:chosen,timed:false});
+    setFb("no","❌ Not quite!",expl+(extra?" "+extra:""));
+    showFineNote();
   }
   updHUD();renderProg();
   if(lives<=0){setTimeout(endGame,2400);return;}
-  current++;setTimeout(function(){clearFlash();showItem();},2800);
+  current++;setTimeout(function(){clearFlash();showItem();},2900);
 }
 
 // ── End ──────────────────────────────────────────────────────────────────────
-function binTag(binId,cssClass){
-  var label=BLAB[binId]?BLAB[binId][lang]||BLAB[binId].en:binId;
-  var colors={glass:"#4A90D9",plastic:"#D4A017",paper:"#3A7BC8",organic:"#4A7C2F",residual:"#555"};
-  return '<span class="wi-bin-tag '+cssClass+'" style="border-left:3px solid '+(colors[binId]||"#888")+'">'+label+'</span>';
-}
 function endGame(){
   clearTimer();answering=false;
   var total=results.length;
-  var ok=results.filter(function(x){return x==="ok"||x==="hinted";}).length;
+  var ok=results.filter(function(x){return x==="ok"||x==="hint";}).length;
   var pct=total?Math.round((ok/total)*100):0;
+  var fails=wrongLog.length;
   document.getElementById("eem").textContent=pct>=80?"🏆":pct>=50?"😊":"🌱";
   document.getElementById("est").textContent=pct>=90?"⭐⭐⭐":pct>=65?"⭐⭐":"⭐";
   var line=ok+"/"+total+" correct ("+pct+"%) — "+score+" pts";
   var msgs={
-    en:[["Keep learning!","Luxembourg's system is complex — try again!\n"+line],["Good effort!","A few tricky ones — keep practising!\n"+line],["Excellent!","You really know your bins! 🇱🇺\n"+line],["Perfect score!","True Luxembourg sorting master! 🇱🇺\n"+line]],
-    fr:[["Continue!","Système complexe!\n"+line],["Bon effort!","Quelques items difficiles!\n"+line],["Excellent!","Tu connais tes poubelles! 🇱🇺\n"+line],["Parfait!","Vrai maître! 🇱🇺\n"+line]],
-    de:[["Weiter lernen!","Luxemburgs System ist komplex!\n"+line],["Gut gemacht!","Ein paar Knifflige!\n"+line],["Ausgezeichnet!","Du kennst deine Tonnen! 🇱🇺\n"+line],["Perfekt!","Echter Luxemburger Sortiermeister! 🇱🇺\n"+line]],
-    lb:[["Weider léieren!","Komplex!\n"+line],["Gutt Effort!","E puer schwéier!\n"+line],["Excellent!","Du weess wou alles higeet! 🇱🇺\n"+line],["Perfekt!","Richtege Trenner! 🇱🇺\n"+line]]
+    en:[["Keep learning!","Luxembourg's system is complex — try again!\n"+line],
+        ["Good effort!","A few tricky ones — keep practising!\n"+line],
+        ["Excellent!","You really know your bins! 🇱🇺\n"+line],
+        ["Perfect score!","True Luxembourg sorting master! 🇱🇺\n"+line]],
+    fr:[["Continue!","Complexe — réessaie!\n"+line],["Bon effort!","Quelques difficiles!\n"+line],
+        ["Excellent!","Tu connais tes poubelles! 🇱🇺\n"+line],["Parfait!","Maître du tri! 🇱🇺\n"+line]],
+    de:[["Weiter!","Komplex — nochmal!\n"+line],["Gut gemacht!","Ein paar Knifflige!\n"+line],
+        ["Ausgezeichnet!","Du kennst deine Tonnen! 🇱🇺\n"+line],["Perfekt!","Sortiermeister! 🇱🇺\n"+line]],
+    lb:[["Weider!","Komplex!\n"+line],["Gutt!","E puer schwéier!\n"+line],
+        ["Excellent!","Du weess wou alles higeet! 🇱🇺\n"+line],["Perfekt!","Richtege Trenner! 🇱🇺\n"+line]]
   };
   var mi=pct===100?3:pct>=80?2:pct>=50?1:0;
   var lm=msgs[lang]||msgs.en;
   document.getElementById("etitle").textContent=lm[mi][0];
   document.getElementById("ebody").textContent=lm[mi][1];
-  var ws=document.getElementById("wrong-section");
-  var wl=document.getElementById("wrong-list");
+
+  // Fine summary
+  var fineEl=document.getElementById("efine");
+  if(fails>0){
+    var savings={en:"💸 Real-world cost of "+fails+" wrong item"+(fails>1?"s":"")+" every week: potentially €250 in fines, or a red PMC penalty label. Sorting correctly saves ~€380/year.",
+      fr:"💸 Coût réel de "+fails+" mauvais tri par semaine: jusqu'à 250€ d'amende ou étiquette rouge PMC. Trier correctement économise ~380€/an.",
+      de:"💸 Reale Kosten von "+fails+" falsch sortierten Gegenständen pro Woche: bis zu 250€ Bußgeld oder roter PMC-Strafaufkleber. Richtiges Sortieren spart ~380€/Jahr.",
+      lb:"💸 Richtege Käschte vu "+fails+" falsch sortierten Artikelen: bis zu 250€ Busgeld. Richteg sortéieren spuert ~380€/Joer."};
+    fineEl.textContent=savings[lang]||savings.en;
+    fineEl.style.display="block";
+  } else fineEl.style.display="none";
+
+  // Wrong item review
+  var ws=document.getElementById("ws");
+  var wl=document.getElementById("wl");
   wl.innerHTML="";
   if(wrongLog.length===0){ws.style.display="none";}
   else{
     ws.style.display="block";
-    document.getElementById("ws-heading").textContent=(WSLBL[lang]||WSLBL.en)+" ("+wrongLog.length+")";
+    document.getElementById("ws-hdr-txt").textContent=(WSLBL[lang]||WSLBL.en)+" ("+wrongLog.length+")";
     wrongLog.forEach(function(e){
       var it=e.item;
       var sm=it.svg().replace('width="60"','width="40"').replace('height="68"','height="46"');
       var expl=it.explain[lang]||it.explain.en;
-      var extra=it.special?(EXTRAS[it.special][lang]||EXTRAS[it.special].en):"";
+      var extra=it.special?(EXTRAS[it.special]?EXTRAS[it.special][lang]||EXTRAS[it.special].en:""):"";
       var binsHtml=e.timed?
-        '<span class="wi-bin-tag wi-timed">'+(TIMEDLBL[lang]||TIMEDLBL.en)+'</span> <span class="wi-arrow">→</span> '+(CORRECTANS[lang]||CORRECTANS.en)+' '+binTag(it.bin,"wi-right"):
-        (YOURANS[lang]||YOURANS.en)+' '+binTag(e.chosenBin,"wi-wrong")+' <span class="wi-arrow">→</span> '+(CORRECTANS[lang]||CORRECTANS.en)+' '+binTag(it.bin,"wi-right");
-      var div=document.createElement("div");div.className="wrong-item";
+        '<span class="wi-tag wi-timed">'+(TIMEDLBL[lang]||TIMEDLBL.en)+'</span> <span class="wi-arr">→</span> '+(CORRECTANS[lang]||CORRECTANS.en)+' '+binTag(it.bin,"wi-right"):
+        (YOURANS[lang]||YOURANS.en)+' '+binTag(e.chosen,"wi-wrong")+' <span class="wi-arr">→</span> '+(CORRECTANS[lang]||CORRECTANS.en)+' '+binTag(it.bin,"wi-right");
+      var div=document.createElement("div");div.className="wi";
       div.innerHTML='<div class="wi-svg">'+sm+'</div><div class="wi-body"><div class="wi-name">'+it.name+'</div><div class="wi-bins">'+binsHtml+'</div><div class="wi-explain">'+expl+(extra?" "+extra:"")+'</div></div>';
       wl.appendChild(div);
     });
@@ -663,6 +1345,175 @@ function endGame(){
   document.getElementById("se").style.display="block";
   window.scrollTo(0,0);
 }
+
+function binTag(binId,cls){
+  var label=BLAB[binId]?BLAB[binId][lang]||BLAB[binId].en:binId;
+  var col=BIN_COLORS[binId]||"#888";
+  return '<span class="wi-tag '+cls+'" style="border-left:3px solid '+col+'">'+label+'</span>';
+}
+
+// ── Search ───────────────────────────────────────────────────────────────────
+function doSearch(raw){
+  var q=raw.trim().toLowerCase();
+  var res=document.getElementById("search-results");
+  var logNote=document.getElementById("unknown-log-note");
+  if(!q){
+    res.innerHTML='<div class="sr-empty">Type any waste item to find out which bin it goes in.</div>';
+    logNote.style.display="none";
+    return;
+  }
+  // fuzzy: check name, desc, hint against query
+  var words=q.split(/\s+/);
+  var hits=POOL.filter(function(it){
+    var haystack=(it.name+" "+it.desc+" "+it.hint).toLowerCase();
+    return words.every(function(w){return haystack.indexOf(w)>=0;});
+  });
+  if(hits.length===0){
+    res.innerHTML='<div class="sr-empty">No match found for "<b>'+escHtml(raw)+'</b>".<br>We\'ve noted your query — it may be added in a future update!</div>';
+    logNote.textContent="💾 Query saved locally for dataset improvement.";
+    logNote.style.display="block";
+    // store unknown query
+    storeUnknown(raw);
+  } else {
+    logNote.style.display="none";
+    res.innerHTML="";
+    hits.slice(0,8).forEach(function(it){
+      var col=BIN_COLORS[it.bin]||"#888";
+      var binName=BLAB[it.bin][lang]||BLAB[it.bin].en;
+      var expl=it.explain[lang]||it.explain.en;
+      var sm=it.svg().replace('width="60"','width="40"').replace('height="68"','height="46"');
+      var extra=it.special?(EXTRAS[it.special]?'<div class="sr-hint">'+(EXTRAS[it.special][lang]||EXTRAS[it.special].en)+'</div>':""):"";
+      var div=document.createElement("div");div.className="sr-item";
+      div.innerHTML='<div class="wi-svg">'+sm+'</div><div class="sr-body"><div class="sr-name">'+it.name+'</div><span class="sr-bin" style="background:'+col+'22;border-left:3px solid '+col+';color:'+col+'">'+binName+'</span><div class="sr-explain">'+expl+'</div>'+extra+'</div>';
+      res.appendChild(div);
+    });
+  }
+}
+function escHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function storeUnknown(q){
+  try{
+    var existing=JSON.parse(localStorage.getItem("recyclo_unknown")||"[]");
+    if(existing.indexOf(q)===-1){existing.push(q);localStorage.setItem("recyclo_unknown",JSON.stringify(existing));}
+  }catch(e){}
+}
 </script>
+
+<script>
+// ── Share helpers ────────────────────────────────────────────────────────────
+var GAME_URL = "https://recyclo-lux.netlify.app"; // update to your actual URL after deploy
+
+var SHARE_TEXT = {
+  en: {
+    game: "♻️ RecycloLux — Can you sort Luxembourg's waste correctly?\n🌱 Beginner · 🔥 Advanced · ⚡ Expert\n4 languages, 91 real items, search any object.\n\n👇 Play free: ",
+    result: function(sc, ok, total, pct){
+      return "♻️ I just played RecycloLux — Luxembourg waste sorting!\n✅ "+ok+"/"+total+" correct ("+pct+"%) — "+sc+" pts\nCan you beat my score? 🇱🇺\n\n👇 Play free: ";
+    }
+  },
+  fr: {
+    game: "♻️ RecycloLux — Savez-vous trier les déchets au Luxembourg ?\n🌱 Débutant · 🔥 Avancé · ⚡ Expert\n4 langues, 91 vrais objets, recherchez n'importe quoi.\n\n👇 Jouez gratuitement : ",
+    result: function(sc, ok, total, pct){
+      return "♻️ Je viens de jouer à RecycloLux — tri des déchets au Luxembourg !\n✅ "+ok+"/"+total+" corrects ("+pct+"%) — "+sc+" pts\nPouvez-vous battre mon score ? 🇱🇺\n\n👇 Jouez gratuitement : ";
+    }
+  },
+  de: {
+    game: "♻️ RecycloLux — Können Sie Luxemburgs Müll richtig trennen?\n🌱 Anfänger · 🔥 Fortgeschritten · ⚡ Experte\n4 Sprachen, 91 echte Gegenstände.\n\n👇 Kostenlos spielen: ",
+    result: function(sc, ok, total, pct){
+      return "♻️ Ich habe gerade RecycloLux gespielt — Mülltrennung in Luxemburg!\n✅ "+ok+"/"+total+" richtig ("+pct+"%) — "+sc+" Pkt.\nKann jemand meinen Score schlagen? 🇱🇺\n\n👇 Kostenlos spielen: ";
+    }
+  },
+  lb: {
+    game: "♻️ RecycloLux — Kanns du de Lëtzebuerger Mëll richteg trennen?\n🌱 Ufänger · 🔥 Fortgeschratt · ⚡ Expert\n4 Sproochen, 91 richteg Objeten.\n\n👇 Gratis spillen: ",
+    result: function(sc, ok, total, pct){
+      return "♻️ Ech hunn RecycloLux gespillt — Mëlltrennung zu Lëtzebuerg!\n✅ "+ok+"/"+total+" richteg ("+pct+"%) — "+sc+" Pkt.\nKanns du mäi Score schloen? 🇱🇺\n\n👇 Gratis spillen: ";
+    }
+  }
+};
+
+function buildShareText(type) {
+  var t = SHARE_TEXT[lang] || SHARE_TEXT.en;
+  if (type === "game") return t.game + GAME_URL;
+  var total = results.length;
+  var ok = results.filter(function(x){ return x==="ok"||x==="hint"; }).length;
+  var pct = total ? Math.round((ok/total)*100) : 0;
+  return t.result(score, ok, total, pct) + GAME_URL;
+}
+
+function openShareModal(type) {
+  var text = buildShareText(type);
+  var titles = {
+    en: { game: "📤 Share RecycloLux", result: "📤 Share your result" },
+    fr: { game: "📤 Partager RecycloLux", result: "📤 Partager votre résultat" },
+    de: { game: "📤 RecycloLux teilen", result: "📤 Ergebnis teilen" },
+    lb: { game: "📤 RecycloLux deelen", result: "📤 Resultat deelen" }
+  };
+  var tl = titles[lang] || titles.en;
+  document.getElementById("share-modal-title").textContent = type==="game" ? tl.game : tl.result;
+  document.getElementById("share-textarea").value = text;
+  document.getElementById("copy-feedback").style.display = "none";
+  document.getElementById("share-modal-overlay").classList.add("open");
+  // Try native share first on real mobile
+  if (navigator.share) {
+    var urlOnly = GAME_URL;
+    var shareTitle = "RecycloLux — Luxembourg Waste Sorting";
+    navigator.share({ title: shareTitle, text: text.replace(urlOnly,"").trim(), url: urlOnly })
+      .then(function(){ closeShareModal(); })
+      .catch(function(e){ /* user cancelled or blocked — modal stays open */ });
+  }
+  // Auto-select text so user can copy manually
+  setTimeout(function(){
+    var ta = document.getElementById("share-textarea");
+    ta.focus(); ta.select();
+  }, 100);
+}
+
+function copyShareText() {
+  var ta = document.getElementById("share-textarea");
+  ta.select(); ta.setSelectionRange(0, 99999);
+  var copied = false;
+  // Try modern clipboard API
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(function(){
+      showCopyFeedback();
+    }).catch(function(){
+      legacyCopy(ta);
+    });
+    return;
+  }
+  legacyCopy(ta);
+}
+
+function legacyCopy(ta) {
+  try {
+    var ok = document.execCommand("copy");
+    if (ok) { showCopyFeedback(); return; }
+  } catch(e) {}
+  // Final fallback: just tell user to copy manually (already selected)
+  var fb = document.getElementById("copy-feedback");
+  var msgs = {en:"Select all & press Ctrl+C / ⌘C to copy",fr:"Sélectionnez tout et appuyez sur Ctrl+C",de:"Alles auswählen und Strg+C drücken",lb:"Alles auswählen an Ctrl+C drécken"};
+  fb.textContent = msgs[lang]||msgs.en;
+  fb.style.background = "var(--org-bg)";
+  fb.style.color = "var(--org-tx)";
+  fb.style.display = "block";
+}
+
+function showCopyFeedback() {
+  var fb = document.getElementById("copy-feedback");
+  var msgs = {en:"✅ Copied to clipboard!",fr:"✅ Copié !",de:"✅ Kopiert!",lb:"✅ Kopéiert!"};
+  fb.textContent = msgs[lang]||msgs.en;
+  fb.style.background = "var(--grn-bg)";
+  fb.style.color = "var(--grn-tx)";
+  fb.style.display = "block";
+  setTimeout(function(){ fb.style.display="none"; }, 2500);
+}
+
+function closeShareModal(e) {
+  if (e && e.target !== document.getElementById("share-modal-overlay")) return;
+  document.getElementById("share-modal-overlay").classList.remove("open");
+}
+
+function shareGame()   { openShareModal("game"); }
+function shareResult() { openShareModal("result"); }
+</script>
+
 </body>
 </html>
