@@ -259,6 +259,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
       <p><b style="color:var(--tx)">4 languages:</b> English · Français · Deutsch · Lëtzebuergesch</p>
       <br>
       <p style="font-size:11px;color:var(--tx3)">Built with ♥ for Luxembourg residents. Data based on Valorlux, Ville de Luxembourg, and Superdreckskëscht official guidelines.</p>
+      <br>
+      <p style="font-size:12px;font-weight:600;color:var(--tx);margin-bottom:4px">🔒 Privacy</p>
+      <p style="font-size:12px;color:var(--tx2);line-height:1.6">When you search for an item not in our dataset, the search term is <b>anonymously collected</b> — no name, no email, no location, no cookies. This data is used solely to identify missing items and expand the game. No personal data is stored or shared. RecycloLux uses no tracking, no advertising, and no accounts.</p>
     </div>
   </div>
 </div>
@@ -1421,7 +1424,7 @@ function doSearch(raw){
   });
   if(hits.length===0){
     res.innerHTML='<div class="sr-empty">No match found for "<b>'+escHtml(raw)+'</b>".<br><span style="font-size:12px;color:var(--tx3)">Try a different spelling, or check the Search tab for similar items.</span></div>';
-    var _msgs={en:"👋 We don't have this item yet — thank you for letting us know! We'll look into it.",fr:"👋 Cet article n'est pas encore dans notre liste — merci de nous le signaler ! Nous allons vérifier.",de:"👋 Diesen Gegenstand haben wir noch nicht — danke für den Hinweis! Wir schauen uns das an.",lb:"👋 Dësen Artikel ass nach net an eiser Lëscht — merci fir den Hinweis! Mir kucken dat no."};
+    var _msgs={en:"👋 We don't have this item yet. Your search has been anonymously noted to help us improve the dataset. Thank you!",fr:"👋 Cet article n'est pas encore dans notre liste. Votre recherche a été notée anonymement pour nous aider à améliorer le jeu. Merci !",de:"👋 Diesen Gegenstand haben wir noch nicht. Ihre Suche wurde anonym gespeichert, um den Datensatz zu verbessern. Danke!",lb:"👋 Dësen Artikel ass nach net an eiser Lëscht. Är Sich gouf anonym gespäichert fir eis ze hëllefen. Merci!"};
     logNote.textContent=_msgs[lang]||_msgs.en;
     logNote.style.display="block";
   } else {
@@ -1460,7 +1463,7 @@ function storeUnknown(q){
 <script>
 
 // ── Report helpers ───────────────────────────────────────────────────────────
-var COLLECTOR_URL = "https://script.google.com/macros/s/AKfycbyVNT8niVpYrtstTh_RsfS1-mBIjVhcimuEZXjMC_vL1Nf4IkQioWKvuRXPUx8vp3MD/exec";
+var COLLECTOR_URL = "https://script.google.com/macros/s/AKfycbzf5kavns7jsYK96cH3eVQt9rz7Px9D8oJldou8QvgJ5LNvuWMvxoXwz27DoQiYh1U/exec";
 var _reportItem = {};
 
 var REPORT_LABELS = {
